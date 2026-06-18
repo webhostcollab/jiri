@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNT — JIRI PROCHAZKA</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --r:#C8102E; --r2:rgba(200,16,46,0.12);
+  --bk:#06040a; --dk:#0d0b12; --paper:#f2ede4; --paperdim:#d4cfc6;
+  --wh:#ede9e1; --lt:#8c8880; --gy:#555450;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(--wh);font-family:'Barlow',sans-serif;user-select:none;}
+
+/* ─── DECK ─── */
+#deck{position:fixed;inset:0;}
+.slide{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(60px,6vh,100px) clamp(80px,7vw,140px);
+  opacity:0;pointer-events:none;overflow:hidden;
+  transition:opacity 0.55s ease;
+}
+.slide.active{opacity:1;pointer-events:all;}
+.inner{width:100%;max-width:min(1400px,88vw);position:relative;z-index:3;}
+
+/* ─── VERTICAL VERT TEXT ─── */
+.vtext{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  position:absolute;z-index:4;pointer-events:none;
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:11px;letter-spacing:0.18em;color:rgba(200,16,46,0.3);
+  line-height:1;
+}
+.vtext-roman{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  position:absolute;z-index:4;pointer-events:none;
+  font-family:'Barlow',sans-serif;font-weight:300;
+  font-size:9px;letter-spacing:0.28em;text-transform:uppercase;
+  color:rgba(255,255,255,0.1);line-height:1;
+}
+
+/* ─── TORN PAPER ─── */
+.torn{
+  position:relative;
+  background:var(--paper);
+  color:#1a1612;
+}
+/* bottom torn edge */
+.torn::after{
+  content:'';
+  position:absolute;bottom:-18px;left:0;right:0;height:20px;
+  background:inherit;
+  clip-path:polygon(
+    0% 0%,2% 60%,4% 10%,6% 70%,8% 20%,10% 80%,12% 30%,
+    14% 90%,16% 40%,18% 100%,20% 50%,22% 95%,24% 45%,
+    26% 85%,28% 35%,30% 75%,32% 20%,34% 65%,36% 10%,
+    38% 55%,40% 0%,42% 45%,44% 85%,46% 30%,48% 70%,
+    50% 15%,52% 60%,54% 5%,56% 50%,58% 90%,60% 35%,
+    62% 80%,64% 25%,66% 65%,68% 10%,70% 55%,72% 95%,
+    74% 40%,76% 80%,78% 20%,80% 65%,82% 5%,84% 50%,
+    86% 90%,88% 30%,90% 70%,92% 15%,94% 55%,96% 0%,
+    98% 45%,100% 80%,100% 0%
+  );
+}
+/* top torn edge variant */
+.torn-top::before{
+  content:'';
+  position:absolute;top:-18px;left:0;right:0;height:20px;
+  background:inherit;
+  clip-path:polygon(
+    0% 100%,2% 40%,4% 90%,6% 30%,8% 80%,10% 20%,12% 70%,
+    14% 10%,16% 60%,18% 0%,20% 50%,22% 5%,24% 55%,
+    26% 15%,28% 65%,30% 25%,32% 80%,34% 35%,36% 90%,
+    38% 45%,40% 100%,42% 55%,44% 15%,46% 70%,48% 30%,
+    50% 85%,52% 40%,54% 95%,56% 50%,58% 10%,60% 65%,
+    62% 20%,64% 75%,66% 30%,68% 85%,70% 35%,72% 5%,
+    74% 60%,76% 20%,78% 80%,80% 35%,82% 95%,84% 50%,
+    86% 10%,88% 70%,90% 30%,92% 85%,94% 45%,96% 100%,
+    98% 55%,100% 20%,100% 100%
+  );
+}
+
+/* ─── INK WASH BG ─── */
+.ink-wash{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(200,16,46,0.06) 0%, transparent 68%);
+}
+
+/* ─── SVG BRUSHSTROKE ─── */
+.brush-rule{display:block;width:100%;overflow:visible;height:12px;margin:20px 0;}
+
+/* ─── UI ─── */
+#ui{position:fixed;inset:0;pointer-events:none;z-index:200;}
+#bar{position:absolute;top:0;left:0;height:2px;background:var(--r);transition:width 0.5s ease;box-shadow:0 0 12px rgba(200,16,46,0.6);}
+#logo{
+  position:absolute;top:26px;left:36px;
+  display:flex;align-items:center;gap:10px;
+}
+.logo-unt{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.2em;color:var(--wh);text-transform:uppercase;}
+.logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);}
+.logo-jp{font-family:'Noto Serif JP',serif;font-weight:300;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
+#snum{position:absolute;top:28px;right:36px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.25em;color:rgba(255,255,255,0.5);}
+#prev,#next{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;background:transparent;border:none;
+  color:rgba(255,255,255,0.55);cursor:pointer;pointer-events:all;
+  display:flex;align-items:center;justify-content:center;transition:color 0.2s;
+}
+#prev{left:20px;}#next{right:20px;}
+#prev:hover,#next:hover{color:var(--r);}
+#prev svg,#next svg{width:20px;height:20px;}
+#bottom-bar{position:absolute;bottom:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;padding:0 36px;}
+#dots{display:flex;gap:6px;align-items:center;pointer-events:all;}
+#hint{position:absolute;right:36px;bottom:18px;}
+.dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.35);transition:all 0.3s;cursor:pointer;pointer-events:all;}
+.dot.on{background:var(--r);width:20px;border-radius:2px;}
+#hint{font-family:'Barlow Condensed',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:4px;pointer-events:all;}
+kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;font-size:9px;}
+/* music player */
+#player{position:absolute;bottom:14px;left:36px;display:flex;align-items:center;gap:2px;pointer-events:all;}
+#player button{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.45);width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;padding:0;}
+#player button:hover{color:var(--r);}
+#player button svg{width:14px;height:14px;}
+
+/* ─── TYPE SYSTEM ─── */
+/* Serif JP used for display headings */
+.serif{font-family:'Noto Serif JP',serif;}
+
+.lbl{
+  font-family:'Barlow',sans-serif;font-weight:400;
+  font-size:10px;letter-spacing:0.45em;text-transform:uppercase;
+  color:var(--r);display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.lbl::before{content:'';width:18px;height:1px;background:var(--r);flex-shrink:0;}
+
+.body{font-size:14px;line-height:1.95;color:var(--lt);font-weight:300;max-width:560px;}
+.body p{margin-bottom:16px;}
+.body p:last-child{margin-bottom:0;}
+.body em{color:var(--wh);font-style:italic;}
+.body strong{color:var(--wh);font-weight:500;}
+.red{color:var(--r);}
+
+/* ══════════════════════════════════════════
+   01  TITLE — samurai poster
+══════════════════════════════════════════ */
+#s1{
+  background:#1c1208;
+  padding:0;
+  overflow:hidden;
+}
+
+/* Jiri photo — woodblock ink treatment: strip colour, extreme contrast, mid brightness
+   Creates flat ink-like masses, no gradual midtones */
+#s1 .c-img{
+  position:absolute; inset:0; z-index:1;
+  background:url('c9b606cc-untitled-design-2023-11-08t100058.392.jpg') 52% 22% / cover no-repeat;
+  filter:grayscale(100%) contrast(3.8) brightness(0.62) sepia(0.18);
+}
+
+/* Red sun — multiply blend so it deepens into the photo naturally, like a painted seal */
+#s1 .c-sun{
+  position:absolute;
+  width: min(72vw, 72vh);
+  height: min(72vw, 72vh);
+  border-radius:50%;
+  top:46%; left:52%;
+  transform:translate(-50%, -50%);
+  z-index:2;
+  /* Soft edge to feel hand-painted, not vector */
+  background:radial-gradient(circle at 48% 44%, #e8152e 0%, #c8102e 55%, #9a0a22 85%, rgba(100,5,15,0.4) 100%);
+  mix-blend-mode:screen;
+  opacity:0.82;
+}
+
+/* Paper grain texture — overlay blend works on dark backgrounds */
+#s1 .c-paper{
+  position:absolute; inset:0; z-index:5; pointer-events:none;
+  opacity:0.35;
+  mix-blend-mode:overlay;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.7 0 0 0 0 0.62 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+
+/* Ink splatter layer */
+#s1 .c-splatter{
+  position:absolute; inset:0; z-index:3; pointer-events:none;
+}
+
+/* Vignette — dark edges, floors bottom */
+#s1 .c-vign{
+  position:absolute; inset:0; z-index:4; pointer-events:none;
+  background:
+    linear-gradient(to top, #000 0%, #000 12%, rgba(0,0,0,0) 45%),
+    radial-gradient(ellipse 110% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+}
+
+/* Large ghost kanji — sits behind title, acts as watermark */
+#s1 .c-kanji{
+  position:absolute; z-index:5;
+  left:48px; top:50%;
+  transform:translateY(-50%);
+  writing-mode:vertical-rl; text-orientation:mixed;
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(72px,11vw,148px);
+  letter-spacing:0.05em;
+  line-height:1;
+  color:rgba(200,16,46,0.22);
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+/* Title stack — vertically centered, left-aligned to margin */
+#s1 .c-title{
+  position:absolute; z-index:6;
+  top:50%; left:60px;
+  transform:translateY(-50%);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:clamp(48px,6.5vw,84px);
+  line-height:0.95;
+  letter-spacing:0.08em;
+  color:#fff;
+  text-transform:uppercase;
+}
+#s1 .c-title span{ display:block; }
+
+/* Red rule above title */
+#s1 .c-rule{
+  position:absolute; z-index:6;
+  top:50%; left:60px;
+  transform:translateY(calc(-50% - clamp(48px,6.5vw,84px)*2*0.95 - 20px));
+  width:48px; height:2px;
+  background:var(--r);
+}
+
+/* ══════════════════════════════════════════
+   02  LOGLINE
+══════════════════════════════════════════ */
+#s2{ background:#000; padding:0; overflow:hidden; }
+
+/* Two stacked images — LEFT side */
+.ll-imgs{
+  position:absolute; left:0; top:0; bottom:0; width:46%;
+  display:grid; grid-template-rows:1fr 1fr; gap:2px;
+}
+.ll-img-a{
+  background:url('1315768752.5.jpg') center 28% / cover no-repeat;
+  filter:grayscale(70%) contrast(1.25) brightness(0.7);
+}
+.ll-img-b{
+  background:url('GettyImages-1232512354-scaled.jpg') center 38% / cover no-repeat;
+  filter:grayscale(70%) contrast(1.2) brightness(0.62);
+}
+/* Fade images into black on the RIGHT edge */
+.ll-imgs::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to left, #000 0%, rgba(0,0,0,0.3) 30%, transparent 60%);
+  z-index:1;
+}
+
+/* Thin red vertical divider */
+.ll-divider{
+  position:absolute; top:10%; bottom:10%; width:1px;
+  left:46%;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+  z-index:3;
+}
+
+/* RIGHT content zone — text left-aligned within it */
+.ll-content{
+  position:absolute; right:0; top:0; bottom:0; width:54%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 72px 80px 72px; z-index:2;
+}
+
+/* Ghost kanji behind the quote */
+.ll-ghost{
+  position:absolute; right:-16px; bottom:-60px; z-index:1;
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(180px,24vw,300px);
+  color:rgba(200,16,46,0.18); line-height:1;
+  pointer-events:none; letter-spacing:-0.02em;
+}
+
+/* Quote — Barlow Condensed light, large, editorial */
+.ll-quote{
+  font-family:'Barlow Condensed',sans-serif; font-weight:300;
+  font-size:clamp(20px,2.4vw,36px); line-height:1.2;
+  color:rgba(237,233,225,0.88); letter-spacing:0.03em;
+  position:relative; z-index:2;
+}
+.ll-quote em{ color:var(--r); font-style:normal; font-weight:500; }
+
+/* Japanese accent below quote */
+.ll-jp-row{
+  margin-top:28px; display:flex; align-items:center; gap:16px;
+  position:relative; z-index:2;
+}
+.ll-jp-text{
+  font-family:'Noto Serif JP',serif; font-weight:300;
+  font-size:14px; letter-spacing:0.25em;
+  color:rgba(255,255,255,0.28); writing-mode:horizontal-tb;
+}
+.ll-jp-rom{
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:9px; letter-spacing:0.45em; text-transform:uppercase;
+  color:rgba(255,255,255,0.15);
+}
+
+/* ══════════════════════════════════════════
+   03  STORY
+══════════════════════════════════════════ */
+#s3{ background:#000; padding:0; overflow:hidden; }
+
+/* Full-bleed video background */
+#s3 .st-video-wrap{
+  position:absolute; inset:0; z-index:1;
+}
+/* Gradient overlay — dark left for text, fades to transparent right */
+#s3 .st-overlay{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 38%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0) 100%),
+    linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 30%);
+}
+
+/* Left content zone */
+#s3 .st-content{
+  position:absolute; left:0; top:0; bottom:0; width:55%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 48px 0 72px; z-index:3;
+}
+#s3 .st-stats-banner{
+  position:absolute; left:0; right:45%; bottom:60px;
+  margin:0; padding:18px 72px 14px; z-index:3;
+  background:rgba(232,224,208,0.92);
+}
+#s3 .st-stats-banner::before{ background:rgba(232,224,208,0.92); }
+
+/* Body text — tight leading, capped width */
+.st-body{
+  max-width:46ch;
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:clamp(13px,1.05vw,15px); line-height:1.6;
+  color:var(--lt);
+}
+.st-body p{ margin-bottom:12px; }
+.st-body p:last-child{ margin-bottom:0; }
+.st-body em{ color:var(--wh); font-style:italic; }
+
+/* ── Samurai stats banner — washi torn paper ── */
+.st-stats-banner{
+  position:relative; margin-top:28px;
+  background:#e8e0d0; padding:18px 20px 14px;
+}
+/* torn top edge */
+.st-stats-banner::before{
+  content:''; position:absolute; top:-13px; left:0; right:0; height:15px;
+  background:#e8e0d0;
+  clip-path:polygon(0% 100%,1.5% 30%,3% 85%,4.5% 20%,6% 70%,7.5% 15%,9% 65%,10.5% 10%,12% 60%,13.5% 5%,15% 55%,16.5% 100%,18% 45%,19.5% 90%,21% 35%,22.5% 80%,24% 25%,25.5% 75%,27% 20%,28.5% 65%,30% 10%,31.5% 55%,33% 0%,34.5% 50%,36% 95%,37.5% 40%,39% 85%,40.5% 30%,42% 75%,43.5% 15%,45% 60%,46.5% 5%,48% 55%,49.5% 100%,51% 40%,52.5% 85%,54% 25%,55.5% 70%,57% 15%,58.5% 60%,60% 5%,61.5% 50%,63% 95%,64.5% 35%,66% 80%,67.5% 20%,69% 65%,70.5% 10%,72% 55%,73.5% 0%,75% 45%,76.5% 90%,78% 30%,79.5% 75%,81% 20%,82.5% 65%,84% 10%,85.5% 55%,87% 100%,88.5% 40%,90% 85%,91.5% 25%,93% 70%,94.5% 15%,96% 60%,97.5% 5%,100% 50%,100% 100%);
+}
+.st-stats{
+  display:flex; gap:0;
+}
+.st-stat{
+  flex:1; padding-right:12px; margin-right:12px;
+  border-right:1px solid rgba(26,22,18,0.1);
+}
+.st-stat:last-child{ border-right:none; padding-right:0; margin-right:0; }
+.st-stat-val{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700; font-size:clamp(14px,1.5vw,20px);
+  color:#1a1612; line-height:1; letter-spacing:0.02em;
+}
+.st-stat-val.red{ color:var(--r); }
+.st-stat-jp{
+  font-family:'Noto Serif JP',serif; font-weight:400;
+  font-size:clamp(13px,1.3vw,18px); color:#1a1612;
+  letter-spacing:0.05em; line-height:1;
+}
+.st-stat-lbl{
+  font-family:'Barlow',sans-serif; font-weight:400;
+  font-size:7px; letter-spacing:0.3em; text-transform:uppercase;
+  color:#7a7670; margin-top:5px;
+}
+
+.st-video-wrap video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover;
+}
+#s3 .st-kanji{
+  position:absolute; z-index:4; right:60px; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; text-orientation:mixed;
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
+  color:rgba(200,16,46,0.28); line-height:1;
+  pointer-events:none; white-space:nowrap;
+}
+
+.story-grid{display:grid;grid-template-columns:260px 1fr;gap:64px;align-items:start;}
+
+/* ── Slide 04 Act I ── */
+#s4{ background:#000; padding:0; overflow:hidden; }
+#s4 .a1-content{
+  position:absolute; left:0; top:0; bottom:0; width:46%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 32px 80px 72px; z-index:2;
+}
+#s4 .a1-title{
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(28px,3.5vw,52px); color:rgba(255,255,255,0.08);
+  letter-spacing:0.05em; line-height:1; margin:0 0 20px;
+}
+#s4 .a1-body{
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:clamp(13px,1.1vw,15px); line-height:1.65;
+  color:var(--lt);
+}
+#s4 .a1-body p{ margin-bottom:14px; }
+#s4 .a1-body p:last-child{ margin-bottom:0; }
+#s4 .a1-body em{ color:var(--wh); font-style:italic; }
+#s4 .a1-photos{
+  position:absolute; right:0; top:0; bottom:0; width:54%;
+}
+#s4 .a1-photos::after{
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:10;
+  background:linear-gradient(to left, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 35%, transparent 65%),
+             linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 30%),
+             linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 25%);
+}
+#s4 .c-card{
+  position:absolute;
+  background:#e8e2d8;
+  padding:6px 6px 22px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+  overflow:hidden;
+  transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+  cursor:default;
+}
+#s4 .c-card:hover{
+  transform:rotate(0deg) scale(1.05) translateY(-6px) !important;
+  box-shadow:0 20px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(200,16,46,0.3);
+  z-index:20 !important;
+}
+#s4 .c-card-img{
+  width:100%; height:100%; object-fit:cover;
+  filter:grayscale(60%) contrast(1.1) sepia(15%) brightness(0.9);
+  display:block;
+}
+/* card positions */
+#s4 .cc1{ width:42%; aspect-ratio:4/3; top:8%;  left:4%;  transform:rotate(-4deg); z-index:3; }
+#s4 .cc2{ width:38%; aspect-ratio:3/4; top:5%;  left:38%; transform:rotate(3deg);  z-index:4; }
+#s4 .cc3{ width:44%; aspect-ratio:4/3; top:36%; left:10%; transform:rotate(2deg);  z-index:5; }
+#s4 .cc4{ width:36%; aspect-ratio:3/4; top:30%; left:50%; transform:rotate(-2.5deg); z-index:3; }
+#s4 .cc5{ width:40%; aspect-ratio:4/3; top:62%; left:2%;  transform:rotate(-1.5deg); z-index:4; }
+#s4 .cc6{ width:38%; aspect-ratio:4/3; top:60%; left:44%; transform:rotate(3.5deg); z-index:5; }
+#s4 .a1-divider{
+  position:absolute; left:46%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+
+/* ── Slide 05 Act II ── */
+#s5{ background:#000; padding:0; overflow:hidden; }
+#s5 .a2-img{ position:absolute; inset:0; z-index:1; overflow:hidden; }
+#s5 .a2-img video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:grayscale(65%) contrast(1.2) brightness(0.55); }
+#s5 .a2-overlay{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background: linear-gradient(to left, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0) 100%),
+    linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 30%);
+}
+#s5 .a2-content{
+  position:absolute; right:0; top:0; bottom:0; width:50%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 72px 80px 48px; z-index:3;
+}
+#s5 .a2-body{
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt);
+}
+#s5 .a2-body p{ margin-bottom:14px; }
+#s5 .a2-body p:last-child{ margin-bottom:0; }
+#s5 .a2-climax{ color:var(--wh); font-style:normal; border-left:2px solid var(--r); padding-left:14px; margin-top:20px; }
+#s5 .a2-climax em{ color:var(--r); font-style:normal; }
+#s5 .a2-divider{
+  position:absolute; right:50%; top:10%; bottom:10%; width:1px; z-index:4;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+#s5 .a2-kanji{
+  position:absolute; z-index:3; left:60px; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; text-orientation:mixed;
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
+  color:rgba(200,16,46,0.2); line-height:1; pointer-events:none; white-space:nowrap;
+}
+
+/* Torn paper fighter card */
+.f-torn{
+  background:var(--paper);
+  color:#1a1612;
+  padding:24px 20px 28px;
+  position:relative;
+  margin-bottom:4px;
+}
+.f-torn::after{
+  content:'';position:absolute;bottom:-16px;left:0;right:0;height:18px;
+  background:var(--paper);
+  clip-path:polygon(0 0,3% 70%,6% 20%,9% 80%,12% 30%,15% 85%,18% 35%,21% 90%,24% 40%,27% 95%,30% 45%,33% 90%,36% 40%,39% 85%,42% 30%,45% 75%,48% 20%,51% 65%,54% 10%,57% 55%,60% 0%,63% 45%,66% 90%,69% 35%,72% 80%,75% 25%,78% 70%,81% 15%,84% 60%,87% 5%,90% 50%,93% 90%,96% 35%,99% 75%,100% 20%,100% 0);
+}
+.f-torn-title{
+  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-size:18px;color:#1a1612;margin-bottom:16px;
+  padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.1);
+  letter-spacing:0.05em;
+}
+.f-torn .row{padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.06);}
+.f-torn .rl{font-size:8px;letter-spacing:0.25em;text-transform:uppercase;color:#7a7670;font-family:'Barlow',sans-serif;font-weight:400;margin-bottom:2px;}
+.f-torn .rv{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:#1a1612;}
+.f-torn .rv.r{color:var(--r);}
+
+/* ══════════════════════════════════════════
+   ACT SLIDES — shared
+══════════════════════════════════════════ */
+.act-bg{
+  position:absolute;right:-20px;top:50%;transform:translateY(-55%);
+  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:clamp(180px,26vw,320px);
+  color:rgba(200,16,46,0.055);line-height:0.85;
+  pointer-events:none;z-index:1;
+  text-shadow:2px 2px 0 rgba(200,16,46,0.03),-1px -1px 0 rgba(200,16,46,0.02);
+}
+.act-hd{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;position:relative;z-index:3;}
+.act-num{
+  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:clamp(36px,5vw,64px);color:var(--r);line-height:1;
+  text-shadow:0 0 30px rgba(200,16,46,0.3);
+  letter-spacing:0.02em;
+}
+.act-title{
+  font-family:'Barlow',sans-serif;font-weight:300;
+  font-size:14px;letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(255,255,255,0.22);
+}
+.act-cols{display:grid;grid-template-columns:1fr 1fr;gap:44px;position:relative;z-index:3;}
+
+/* vertical text sidebar on act slides */
+.act-vt{
+  position:absolute;left:-52px;top:0;bottom:0;
+  display:flex;align-items:center;
+}
+.act-vt-inner{
+  writing-mode:vertical-rl;
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:10px;letter-spacing:0.2em;
+  color:rgba(200,16,46,0.2);
+  white-space:nowrap;
+}
+
+/* ══ ACT II ══ */
+.a2-grid{display:grid;grid-template-columns:1fr 220px;gap:36px;align-items:start;position:relative;z-index:3;}
+.hi{border-left:1px solid var(--r);padding:16px 20px;background:rgba(200,16,46,0.04);margin-bottom:8px;}
+.hi p{font-size:13px;line-height:1.85;color:var(--lt);font-weight:300;}
+.climax-line{
+  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-size:16px;line-height:1.5;color:var(--wh);
+  padding:16px 20px;border-left:1px solid rgba(255,255,255,0.1);margin-top:8px;
+}
+
+/* Torn paper kanji card */
+.k-card{
+  background:var(--paper);
+  padding:28px 20px;text-align:center;
+  position:relative;
+}
+.k-card::after{
+  content:'';position:absolute;bottom:-14px;left:0;right:0;height:16px;
+  background:var(--paper);
+  clip-path:polygon(0 0,5% 60%,10% 10%,15% 70%,20% 20%,25% 80%,30% 30%,35% 85%,40% 35%,45% 90%,50% 40%,55% 90%,60% 35%,65% 80%,70% 25%,75% 70%,80% 15%,85% 60%,90% 5%,95% 50%,100% 0,100% 0%,0 0%);
+}
+.k-card-char{font-family:'Noto Serif JP',serif;font-weight:900;font-size:72px;color:#1a1612;line-height:1;display:block;}
+.k-card-rom{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-top:10px;display:block;}
+.k-card-en{font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;color:#7a7670;margin-top:3px;display:block;}
+
+/* ══ ACT III ══ */
+.proverb-strip{
+  margin-top:28px;padding:18px 20px;
+  background:rgba(200,16,46,0.04);
+  border-left:1px solid rgba(200,16,46,0.25);
+  display:flex;align-items:center;gap:18px;
+}
+.prov-jp{font-family:'Noto Serif JP',serif;font-weight:700;font-size:16px;color:rgba(200,16,46,0.6);white-space:nowrap;}
+.prov-en{font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+
+/* ══════════════════════════════════════════
+   CHARACTER
+══════════════════════════════════════════ */
+.char-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;}
+
+/* ══════════════════════════════════════════
+   BACKSTORY TIMELINE
+══════════════════════════════════════════ */
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.tl-row{display:grid;grid-template-columns:64px 1fr;cursor:default;transition:background 0.2s;border-radius:2px;}
+.tl-row:hover .tl-yr{color:var(--r);border-right-color:rgba(200,16,46,0.5);}
+.tl-row:hover .tl-body strong{color:var(--r);}
+.tl-row:hover .tl-body{border-bottom-color:rgba(200,16,46,0.15);}
+.tl-yr{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;
+  letter-spacing:0.1em;color:var(--r);padding:12px 12px 12px 0;
+  text-align:right;border-right:1px solid rgba(200,16,46,0.15);
+  align-self:start;margin-top:12px;transition:color 0.2s,border-color 0.2s;
+}
+.tl-body{padding:12px 0 12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);transition:border-color 0.2s;}
+.tl-body strong{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--wh);margin-bottom:2px;letter-spacing:0.02em;transition:color 0.2s;}
+.tl-body span{font-size:12px;line-height:1.65;color:var(--gy);font-weight:300;}
+
+/* ══════════════════════════════════════════
+   SPECIAL
+══════════════════════════════════════════ */
+.sp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:36px;}
+.sp-card{
+  background:var(--paper);padding:28px 22px 36px;
+  position:relative;overflow:hidden;
+  transition:filter 0.25s;
+}
+.sp-card:hover{ background:var(--r); filter:none; }
+.sp-card:hover .sp-n{ color:rgba(255,255,255,0.15); }
+.sp-card:hover .sp-title{ color:#fff; }
+.sp-card:hover .sp-body{ color:rgba(255,255,255,0.75); }
+.sp-card{ transition:background 0.25s, filter 0.25s; }
+.sp-card::after{
+  content:'';position:absolute;bottom:-14px;left:0;right:0;height:16px;
+  background:var(--paper);
+  clip-path:polygon(0 0,4% 55%,8% 10%,12% 65%,16% 15%,20% 70%,24% 20%,28% 75%,32% 25%,36% 80%,40% 30%,44% 85%,48% 35%,52% 85%,56% 35%,60% 80%,64% 25%,68% 70%,72% 15%,76% 65%,80% 10%,84% 60%,88% 5%,92% 55%,96% 0%,100% 45%,100% 0,0 0);
+}
+.sp-n{
+  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:40px;color:rgba(0,0,0,0.08);line-height:1;margin-bottom:14px;
+}
+.sp-title{
+  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-size:13px;color:#1a1612;margin-bottom:12px;letter-spacing:0.05em;
+}
+.sp-body{font-size:12px;line-height:1.85;color:#5a5650;font-weight:300;}
+
+/* ══════════════════════════════════════════
+   WHY NOW
+══════════════════════════════════════════ */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.pq{
+  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-size:clamp(15px,1.8vw,20px);line-height:1.7;color:var(--wh);
+  border-left:1px solid var(--r);padding-left:16px;margin-top:18px;
+}
+
+/* ══════════════════════════════════════════
+   APPEAL + COMPS
+══════════════════════════════════════════ */
+.appeal-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;}
+.big-stat{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:60px;color:var(--r);line-height:0.88;letter-spacing:-0.02em;
+  text-shadow:0 0 28px rgba(200,16,46,0.28);
+}
+.big-lbl{
+  font-family:'Barlow',sans-serif;font-weight:300;
+  font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--gy);margin-bottom:22px;
+}
+.comp-posters{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:4px; }
+.cp-item{ display:flex; flex-direction:column; gap:10px; }
+.cp-poster-img{ width:100%; aspect-ratio:2/3; object-fit:cover; display:block;
+  filter:grayscale(30%) contrast(1.05); border:1px solid rgba(255,255,255,0.06);
+  transition:filter 0.3s, transform 0.3s; }
+.cp-item:hover .cp-poster-img{ filter:grayscale(0%) contrast(1.1); transform:scale(1.02); }
+.cp-cap{ padding:0 2px; }
+.cp-title{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px;
+  text-transform:uppercase; letter-spacing:0.06em; color:var(--wh); line-height:1.2; margin-bottom:3px; }
+.cp-dir{ font-family:'Barlow',sans-serif; font-weight:300; font-size:10px;
+  color:var(--lt); letter-spacing:0.02em; line-height:1.4; }
+.comps-hd{
+  font-family:'Barlow',sans-serif;font-weight:300;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;color:var(--r);margin-bottom:10px;
+}
+.comp{border-bottom:1px solid rgba(255,255,255,0.05);overflow:hidden;}
+.comp-trg{display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;}
+.comp-trg:hover .cn{color:var(--r);}
+.cn{
+  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-size:15px;color:var(--wh);transition:color 0.2s;
+  display:flex;align-items:center;gap:10px;
+}
+.cn::before{content:'—';color:var(--r);font-family:'Barlow Condensed',sans-serif;font-weight:700;}
+.chev{width:14px;height:14px;color:rgba(255,255,255,0.15);transition:transform 0.35s,color 0.2s;flex-shrink:0;}
+.comp.open .chev{transform:rotate(180deg);color:var(--r);}
+.cexp{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(0.4,0,0.2,1);}
+.comp.open .cexp{grid-template-rows:1fr;}
+.cexp-in{overflow:hidden;}
+.cprow{display:flex;gap:14px;padding-bottom:18px;align-items:flex-start;min-width:0;}
+.cprow > div:last-child{min-width:0;overflow:hidden;}
+.poster{flex-shrink:0;width:130px;height:195px;overflow:hidden;position:relative;}
+.poster img{width:100%;height:100%;object-fit:cover;display:block;filter:sepia(15%) contrast(1.05);}
+.pfb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-end;padding:10px;}
+.pfb-t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;text-align:center;color:#fff;line-height:1.1;}
+.pfb-y{font-size:10px;color:var(--r);letter-spacing:0.15em;margin-top:4px;}
+.cyr{font-family:'Barlow',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--r);margin-bottom:6px;}
+.cdesc{font-size:13px;line-height:1.75;color:var(--gy);font-weight:300;overflow-wrap:break-word;}
+
+/* ══════════════════════════════════════════
+   STATUS
+══════════════════════════════════════════ */
+.st-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:36px;}
+.st-hd{
+  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-size:13px;color:var(--wh);margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid rgba(200,16,46,0.2);
+}
+.stl{list-style:none;}
+.stl li{font-size:13px;line-height:1.75;color:var(--lt);font-weight:300;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;gap:10px;}
+.stl li::before{content:'→';color:var(--r);font-family:'Barlow Condensed',sans-serif;font-weight:700;flex-shrink:0;}
+
+/* ══════════════════════════════════════════
+   TONE
+══════════════════════════════════════════ */
+.tone-chips{display:flex;flex-wrap:wrap;gap:2px;margin:24px 0;}
+.chip{
+  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-size:clamp(18px,2.4vw,30px);letter-spacing:0.03em;
+  padding:10px 20px;border:1px solid rgba(255,255,255,0.05);
+  color:rgba(255,255,255,0.1);transition:all 0.22s;cursor:pointer;
+}
+.chip:hover{color:var(--wh);border-color:rgba(255,255,255,0.1);}
+.chip.on{color:var(--r);border-color:rgba(200,16,46,0.25);background:rgba(200,16,46,0.04);}
+.tone-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.tg-p{background:rgba(255,255,255,0.015);padding:18px 20px;border-left:1px solid rgba(200,16,46,0.18);font-size:12px;line-height:1.75;color:var(--lt);font-weight:300;}
+
+/* ══════════════════════════════════════════
+   TEAM
+══════════════════════════════════════════ */
+.team-ph{margin-top:36px;border:1px dashed rgba(255,255,255,0.06);padding:52px;text-align:center;}
+.team-ph p{font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.1);}
+
+/* ══════════════════════════════════════════
+   CLOSING
+══════════════════════════════════════════ */
+.close-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;min-height:calc(100vh - 160px);gap:0;
+}
+.close-left{
+  border-right:1px solid rgba(200,16,46,0.2);
+  padding-right:60px;
+}
+.close-big-kanji{
+  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-size:clamp(80px,14vw,180px);color:rgba(200,16,46,0.18);
+  line-height:0.85;letter-spacing:-0.02em;margin-bottom:20px;
+  text-shadow:3px 3px 0 rgba(200,16,46,0.04), 0 4px 20px rgba(200,16,46,0.1);
+}
+.close-jp-text{
+  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-size:13px;letter-spacing:0.2em;color:rgba(200,16,46,0.35);
+  margin-bottom:24px;line-height:2;
+}
+.close-right{padding-left:60px;}
+.close-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;
+  font-size:clamp(52px,8vw,100px);text-transform:uppercase;
+  line-height:0.85;letter-spacing:-0.01em;color:var(--wh);
+  margin-bottom:20px;
+}
+.close-sub{font-size:14px;line-height:1.85;color:var(--lt);font-weight:300;max-width:400px;}
+.close-mark{width:36px;height:2px;background:var(--r);margin-bottom:20px;box-shadow:0 0 10px rgba(200,16,46,0.4);}
+
+/* Slide backgrounds */
+#s13,#s14{background:var(--dk);}
+/* ── Slide 12 Status ── */
+#s12{ background:#000; padding:0; overflow:hidden; }
+#s12 .st-content{
+  position:absolute; left:0; top:0; bottom:0; width:55%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 48px 80px 72px; z-index:2;
+}
+#s12 .st-intro{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt); margin-bottom:28px; }
+#s12 .st-hd2{ font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:10px; letter-spacing:0.35em; text-transform:uppercase; color:var(--r); margin-bottom:10px; }
+#s12 .stl2{ list-style:none; margin-bottom:24px; }
+#s12 .stl2 li{ font-size:13px; line-height:1.7; color:var(--lt); font-weight:300; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; gap:10px; }
+#s12 .stl2 li::before{ content:'→'; color:var(--r); font-family:'Barlow Condensed',sans-serif; font-weight:700; flex-shrink:0; }
+#s12 .st-video{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+#s12 .st-video video{ width:100%; height:100%; object-fit:cover; filter:grayscale(70%) contrast(1.1) brightness(0.22); }
+#s12 .st-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to right, rgba(6,4,10,0.82) 0%, rgba(6,4,10,0.55) 55%, rgba(6,4,10,0.3) 100%); }
+#s12 .st-content{ position:relative; z-index:2; }
+#s12 .st-divider{
+  position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+/* ── Slide 14 References ── */
+.ref-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.ref-tile{
+  position:relative;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.06);
+  transition:border-color 0.2s;
+}
+.ref-tile:hover{ border-color:rgba(200,16,46,0.5); }
+.ref-thumb{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:grayscale(60%) brightness(0.55);
+  transition:filter 0.3s;
+  display:block;
+}
+.ref-tile:hover .ref-thumb{ filter:grayscale(20%) brightness(0.65); }
+.ref-overlay{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:8px;
+  background:linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%);
+  transition:background 0.2s;
+}
+.ref-tile:hover .ref-overlay{ background:linear-gradient(to top, rgba(200,16,46,0.35) 0%, rgba(0,0,0,0.1) 60%); }
+.ref-play{
+  color:rgba(255,255,255,0.8);
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.8));
+  transition:color 0.2s, transform 0.2s;
+}
+.ref-tile:hover .ref-play{ color:#fff; transform:scale(1.15); }
+.ref-play svg{ width:26px; height:26px; }
+.ref-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.7);
+  text-align:center;
+  padding:0 10px;
+  line-height:1.3;
+  text-shadow:0 1px 4px rgba(0,0,0,0.9);
+}
+/* ── Column width cap — keeps lines readable on large displays ── */
+#s4 .a1-content,
+#s5 .a2-content,
+#s6 .a3-content,
+#s7 .ch-content,
+#s10 .wn-content,
+#s12 .st-content { max-width: 680px; }
+
+/* ── Slide 13 Tone + References ── */
+#s13{ background:#000; padding:0; overflow:hidden; }
+#s13 .inner{ padding:52px 72px; }
+.tone-text-row{ border-top:1px solid rgba(255,255,255,0.06); padding-top:20px; }
+.tone-pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:0; }
+.tone-pill{
+  font-family:'Barlow Condensed',sans-serif; font-size:10px;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--wh); border:1px solid rgba(255,255,255,0.35);
+  padding:5px 12px; cursor:default;
+  transition:color 0.2s, border-color 0.2s;
+}
+.tone-pill:hover, .tone-pill.active:hover{ color:var(--r); border-color:rgba(200,16,46,0.6); }
+.tone-pill.active{ color:var(--wh); border-color:rgba(255,255,255,0.35); }
+.tone-kanji{
+  position:absolute; right:-20px; top:50%; transform:translateY(-55%);
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(160px,22vw,280px); color:rgba(200,16,46,0.05);
+  line-height:0.85; pointer-events:none; z-index:1;
+}
+.tone-divider{
+  position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+.tone-left{
+  position:absolute; left:0; top:0; bottom:0; width:55%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 48px 80px 72px; z-index:2;
+}
+.tone-lead{
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:clamp(14px,1.1vw,17px); line-height:1.75;
+  color:var(--wh); margin-bottom:28px;
+}
+.tone-list{
+  list-style:none; margin:0; padding:0;
+}
+.tone-list li{
+  font-family:'Barlow',sans-serif; font-weight:300;
+  font-size:clamp(12px,0.95vw,14px); line-height:1.65;
+  color:var(--lt); padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  display:flex; gap:12px;
+}
+.tone-list li::before{ content:'—'; color:var(--r); flex-shrink:0; font-weight:700; }
+.tone-right{
+  position:absolute; right:0; top:0; bottom:0; width:45%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 72px 80px 48px; z-index:2;
+}
+.tone-jp{
+  font-family:'Noto Serif JP',serif; font-weight:700;
+  font-size:clamp(36px,5vw,64px); color:var(--wh);
+  line-height:1.1; margin-bottom:10px;
+}
+.tone-en{
+  font-family:'Barlow Condensed',sans-serif; font-weight:400;
+  font-size:10px; letter-spacing:0.35em; text-transform:uppercase;
+  color:var(--gy); margin-bottom:36px;
+}
+.tone-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.tone-chip{
+  font-family:'Barlow Condensed',sans-serif; font-size:10px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--lt); border:1px solid rgba(255,255,255,0.1);
+  padding:5px 12px;
+}
+.tone-chip.active{ color:var(--r); border-color:rgba(200,16,46,0.4); }
+/* Lightbox */
+#lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,0.92);
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+#lightbox.open{ display:flex; }
+#lb-video{
+  max-width:85vw;
+  max-height:78vh;
+  width:auto;
+  height:auto;
+  outline:none;
+  box-shadow:0 0 60px rgba(0,0,0,0.8);
+}
+#lb-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+  margin-top:16px;
+}
+#lb-close{
+  position:absolute;
+  top:24px;
+  right:32px;
+  background:none;
+  border:none;
+  color:rgba(255,255,255,0.4);
+  font-size:22px;
+  cursor:pointer;
+  transition:color 0.2s;
+  line-height:1;
+  padding:4px 8px;
+}
+#lb-close:hover{ color:var(--r); }
+/* ── Slide 10 Why Now ── */
+#s10{ background:#000; padding:0; overflow:hidden; }
+#s10 .wn-video{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+#s10 .wn-video video{ width:100%; height:100%; object-fit:cover; filter:grayscale(40%) brightness(0.6) contrast(1.1); }
+#s10 .wn-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to right, rgba(6,4,10,0.85) 0%, rgba(6,4,10,0.55) 55%, rgba(6,4,10,0.2) 100%); }
+#s10 .wn-content{
+  position:absolute; left:0; top:0; bottom:0; width:55%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 48px 80px 72px; z-index:3;
+}
+#s10 .wn-title{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:clamp(28px,3.5vw,52px); color:var(--wh); line-height:1.05; letter-spacing:0.02em; margin-bottom:20px; }
+#s10 .wn-title span{ color:var(--r); }
+#s10 .wn-pq{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.1vw,15px); line-height:1.7; color:var(--lt); border-left:2px solid var(--r); padding-left:14px; margin-bottom:20px; }
+#s10 .wn-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,0.95vw,13.5px); line-height:1.65; color:rgba(237,233,225,0.5); }
+#s10 .wn-body p{ margin-bottom:10px; }
+#s10 .wn-body p:last-child{ margin-bottom:0; }
+#s10 .wn-photo{
+  position:absolute; right:0; top:0; bottom:0; width:45%;
+  background:url('Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-02%20at%2011.25.42.jpeg') center 30% / cover no-repeat;
+  filter:grayscale(70%) contrast(1.2) brightness(0.55);
+}
+#s10 .wn-photo::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to left, #000 0%, rgba(0,0,0,0.2) 30%, transparent 60%);
+}
+#s10 .wn-divider{
+  position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+#s10 .wn-kanji{
+  position:absolute; z-index:1; right:48px; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(80px,12vw,160px); color:rgba(200,16,46,0.15); line-height:1; pointer-events:none;
+}
+#s8{ background:#000; padding:0; overflow:hidden; }
+#s8 .s8-bg{
+  position:absolute; inset:0; z-index:0;
+  background:url('295-star-jiri-prochazka-channelled-858179790.webp') center 25% / cover no-repeat;
+  filter:grayscale(50%) contrast(1.1) brightness(0.7);
+}
+#s8 .s8-bg::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%),
+             linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+}
+#s8 .inner{ position:relative; z-index:2; padding:80px 96px 80px 160px; }
+#s8 .body p{ color:rgba(237,233,225,0.75); }
+#s8 .tl-row{ margin-bottom:4px; }
+/* ── Slide 06 Act III ── */
+#s6{ background:#000; padding:0; overflow:hidden; }
+#s6 .a3-content{
+  position:absolute; left:0; top:0; bottom:0; width:55%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 48px 80px 72px; z-index:2;
+}
+#s6 .a3-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt); }
+#s6 .a3-body p{ margin-bottom:14px; }
+#s6 .a3-body p:last-child{ margin-bottom:0; }
+#s6 .a3-proverb{ border-left:2px solid var(--r); padding-left:14px; margin-top:20px; }
+#s6 .a3-proverb .prov-jp{ font-family:'Noto Serif JP',serif; font-weight:700; font-size:15px; color:rgba(200,16,46,0.7); display:block; margin-bottom:4px; }
+#s6 .a3-proverb .prov-en{ font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+#s6 .a3-photos{
+  position:absolute; right:0; top:0; bottom:0; width:45%;
+  display:grid; grid-template-rows:1fr 1fr; gap:2px;
+}
+#s6 .a3-photo{ overflow:hidden; }
+#s6 .a3-photo-a{
+  background:url('3876803832634488980_3876776589631794876.jpg') center 30% / cover no-repeat;
+  filter:grayscale(70%) contrast(1.25) brightness(0.65);
+}
+#s6 .a3-photo-b{
+  background:url('3876803832634488980_3876776590906853937.jpg') center 35% / cover no-repeat;
+  filter:grayscale(70%) contrast(1.25) brightness(0.6);
+}
+#s6 .a3-photos::after{ display:none; }
+#s6 .a3-divider{
+  position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+#s6 .a3-kanji{
+  position:absolute; z-index:1; right:50px; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; text-orientation:mixed;
+  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
+  color:rgba(200,16,46,0.18); line-height:1; pointer-events:none; white-space:nowrap;
+}
+#s9{background:#000;overflow:hidden;}
+#s9 .s9-video{ position:absolute;inset:0;z-index:0; }
+#s9 .s9-video video{ width:100%;height:100%;object-fit:cover;filter:grayscale(50%) brightness(0.55) contrast(1.1); }
+#s9 .s9-overlay{ position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(135deg, rgba(6,4,10,0.7) 0%, rgba(6,4,10,0.3) 100%); }
+#s9 .inner{ position:relative;z-index:2; }
+#s15{ background:#1c1208; padding:0; overflow:hidden; }
+#s15 .c-img{ background-image:url('8b3e2ec0-ea0f-11ec-bdff-169c055f8019.webp'); background-position:center 30%; }
+#s11{background:var(--bk);padding:60px 64px;}
+/* ── Slide 07 Character ── */
+#s7{ background:#000; padding:0; overflow:hidden; }
+#s7 .ch-content{
+  position:absolute; right:0; top:0; bottom:0; width:48%;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 72px 80px 48px; z-index:2;
+}
+#s7 .ch-title{ font-family:'Noto Serif JP',serif; font-weight:700; font-size:clamp(20px,2.6vw,34px); color:var(--wh); margin-bottom:20px; line-height:1.15; }
+#s7 .ch-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,1vw,14px); line-height:1.65; color:var(--lt); }
+#s7 .ch-body p{ margin-bottom:12px; }
+#s7 .ch-body p:last-child{ margin-bottom:0; }
+/* collage panel */
+#s7 .ch-collage{
+  position:absolute; left:0; top:0; bottom:0; width:52%;
+  background:#000; overflow:hidden;
+}
+#s7 .ch-collage::after{
+  content:''; position:absolute; inset:0; z-index:10; pointer-events:none;
+  background:linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
+}
+#s7 .cp{
+  position:absolute;
+  background-size:cover; background-position:center;
+  filter:grayscale(40%) contrast(1.1) brightness(0.9) sepia(8%);
+  box-shadow:0 4px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s, box-shadow 0.4s, z-index 0s;
+  cursor:pointer;
+}
+#s7 .cp:hover{
+  filter:grayscale(20%) contrast(1.1) brightness(0.85) sepia(0%);
+  box-shadow:0 20px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(200,16,46,0.3);
+  z-index:20;
+}
+#s7 .cp-1{ width:46%; height:38%; top:8%; left:6%; transform:rotate(-3deg);
+  background-image:url('Photo%20Archives%20-%20Jiri%20/Jiri_s%20friends.jpeg'); background-position:center 30%; }
+#s7 .cp-1:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
+#s7 .cp-2{ width:44%; height:36%; top:12%; left:44%; transform:rotate(2.5deg);
+  background-image:url('1315780883.webp'); background-position:center 15%; }
+#s7 .cp-2:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
+#s7 .cp-3{ width:50%; height:40%; top:44%; left:4%; transform:rotate(1.5deg);
+  background-image:url('images.jpeg'); background-position:center 25%; }
+#s7 .cp-3:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
+#s7 .cp-4{ width:42%; height:36%; top:50%; left:46%; transform:rotate(-2deg);
+  background-image:url('Photo%20Archives%20-%20Jiri%20/5d19ae3d-ecef-46f9-9166-31e19d2b734c.JPG'); background-position:center 25%; }
+#s7 .cp-4:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
+#s7 .ch-divider{
+  position:absolute; left:52%; top:10%; bottom:10%; width:1px; z-index:3;
+  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
+}
+#s7 .ch-kanji{
+  position:absolute; z-index:1; right:48px; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; font-family:'Noto Serif JP',serif; font-weight:900;
+  font-size:clamp(80px,12vw,160px); color:rgba(200,16,46,0.12); line-height:1; pointer-events:none;
+}
+#s5{background:#000;}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══ 01 TITLE ══ -->
+<section class="slide active" id="s1" data-i="0">
+  <div class="c-paper"></div>
+  <div class="c-sun"></div>
+  <div class="c-img"></div>
+  <!-- ink splatter SVG -->
+  <svg class="c-splatter" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="112" cy="680" r="4.5" fill="rgba(10,6,4,0.55)"/>
+    <circle cx="98"  cy="710" r="2"   fill="rgba(10,6,4,0.4)"/>
+    <circle cx="130" cy="695" r="1.5" fill="rgba(10,6,4,0.35)"/>
+    <ellipse cx="88" cy="725" rx="6" ry="3" fill="rgba(10,6,4,0.45)" transform="rotate(-20 88 725)"/>
+    <circle cx="160" cy="740" r="3"   fill="rgba(10,6,4,0.3)"/>
+    <circle cx="175" cy="720" r="1.5" fill="rgba(10,6,4,0.25)"/>
+    <circle cx="210" cy="760" r="5"   fill="rgba(10,6,4,0.5)"/>
+    <circle cx="228" cy="745" r="2"   fill="rgba(10,6,4,0.35)"/>
+    <circle cx="250" cy="710" r="1"   fill="rgba(10,6,4,0.25)"/>
+    <ellipse cx="320" cy="780" rx="8" ry="4" fill="rgba(10,6,4,0.4)" transform="rotate(15 320 780)"/>
+    <circle cx="340" cy="760" r="2.5" fill="rgba(10,6,4,0.3)"/>
+    <circle cx="78"  cy="620" r="3"   fill="rgba(10,6,4,0.2)"/>
+    <circle cx="55"  cy="640" r="1.5" fill="rgba(10,6,4,0.15)"/>
+    <circle cx="1100" cy="620" r="3.5" fill="rgba(10,6,4,0.3)"/>
+    <circle cx="1120" cy="640" r="1.5" fill="rgba(10,6,4,0.2)"/>
+    <ellipse cx="1080" cy="600" rx="5" ry="2.5" fill="rgba(10,6,4,0.25)" transform="rotate(30 1080 600)"/>
+    <circle cx="950" cy="800" r="4"   fill="rgba(10,6,4,0.35)"/>
+    <circle cx="970" cy="820" r="2"   fill="rgba(10,6,4,0.25)"/>
+    <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
+  </svg>
+  <div class="c-vign"></div>
+  <div class="c-kanji">武士道</div>
+  <div class="c-title">
+    <span>UNT. JIRI</span>
+    <span>PROCHAZKA</span>
+  </div>
+</section>
+
+<!-- ══ 02 LOGLINE ══ -->
+<section class="slide" id="s2" data-i="1">
+  <div class="ll-imgs">
+    <div class="ll-img-a"></div>
+    <div class="ll-img-b"></div>
+  </div>
+  <div class="ll-divider"></div>
+  <div class="ll-ghost">己</div>
+  <div class="ll-content">
+    <div class="lbl" style="margin-bottom:20px;">Logline</div>
+    <p class="ll-quote">
+      At the peak of his career, UFC fighter Jiří Procházka sets out to <em>reclaim his title</em> — but a devastating loss just days before the birth of his first child forces him to confront <em>who he is</em> beyond the identity he has built as a fighter.
+    </p>
+    <div class="ll-jp-row">
+      <span class="ll-jp-text">己を知れ</span>
+      <span class="ll-jp-rom">Know Thyself</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 03 THE STORY ══ -->
+<section class="slide" id="s3" data-i="2">
+  <div class="st-video-wrap">
+    <video id="s3-video" autoplay muted playsinline preload="auto">
+      <source src="samurai_mindset_web.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="st-overlay"></div>
+  <div class="st-kanji">武士道</div>
+  <div class="st-content">
+    <div class="lbl" style="margin-bottom:16px;">The Story</div>
+    <div class="st-body">
+      <p>We met Jiří Procházka just weeks before his fight to reclaim the UFC light heavyweight championship — a moment that would define his legacy — just days before the birth of his first child.</p>
+      <p>One of the fastest-rising champions in UFC history, Procházka won the title in 2022 in just three fights, building a reputation for his unpredictable style and near-monastic commitment to <em>Japanese Samurai code</em>. A national symbol in the Czech Republic, he moves between two worlds: a quiet, minimalist life in a small Central European village, and the global stage of sold-out arenas.</p>
+      <p>What begins as a story about a championship comeback expands into a personal meditation on resilience, self-discipline, and a relentless pursuit to test limits.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 04 ACT I ══ -->
+<section class="slide" id="s4" data-i="3">
+  <div class="a1-content">
+    <div class="lbl" style="margin-bottom:12px;white-space:nowrap;">Act I — The Origin</div>
+    <div class="a1-body">
+      <p>Jiří's story begins in a small Czech village. After losing his father young, he found direction in <em>The Book of Five Rings</em> — a samurai text that became the foundation of how he lives, trains, and fights.</p>
+      <p>In 2019 he fought in Japan's Rizin league, where his philosophy took form. He turned an ancient code into something he actually lived by.</p>
+      <p>Joining UFC in 2020, his rise was immediate — three fights, one title. One of the fastest champions in the organization's history.</p>
+      <p>Then, at the height of his ascent, a serious injury forces him out for a year. His first child is on the way. Everything he's built is about to be tested.</p>
+    </div>
+  </div>
+  <div class="a1-divider"></div>
+  <div class="a1-photos">
+    <div class="c-card cc1"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40.jpeg" alt=""></div>
+    <div class="c-card cc2"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41%20(3).jpeg" alt=""></div>
+    <div class="c-card cc3"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41%20(4).jpeg" alt=""></div>
+    <div class="c-card cc4"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40%20(1).jpeg" alt=""></div>
+    <div class="c-card cc5"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41.jpeg" alt=""></div>
+    <div class="c-card cc6"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40%20(2).jpeg" alt=""></div>
+  </div>
+</section>
+
+<!-- ══ 05 ACT II ══ -->
+<section class="slide" id="s5" data-i="4">
+  <div class="a2-img"><video autoplay muted playsinline loop><source src="jiri_s5_clip.mp4" type="video/mp4"></video></div>
+  <div class="a2-overlay"></div>
+  <div class="a2-kanji">敗北</div>
+  <div class="a2-content">
+    <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act II — The Loss</div>
+    <div class="a2-body">
+      <p>ACT II stays close to Jiri in the weeks leading up to his fight against Ulberg — and everything that follows the loss.</p>
+      <p>The flight home to Prague, post-fight surgery, and the birth of his daughter all unfold within a matter of days.</p>
+      <p>Someone who's been widely loved is suddenly dealing with criticism in a way he never has before. We stay with him through this unexpected wave of public backlash.</p>
+      <p class="a2-climax">At his lowest point mentally and emotionally — <em>his first child is born.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 06 ACT III ══ -->
+<section class="slide" id="s6" data-i="5">
+  <div class="a3-kanji">再生</div>
+  <div class="a3-divider"></div>
+  <div class="a3-content">
+    <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act III — The Rebuild</div>
+    <div class="a3-body">
+      <p>The birth of Jiri's daughter Elenka reframes everything. There's something immediate and external that carries weight — and freedom is lost in the process.</p>
+      <p>At the same time, he's restructuring his team, letting go of what isn't working, facing the backlash from his loss and finding strength in changing course.</p>
+      <p>Climb Mount Fuji. Trip to Thailand. Perseverance — resilience. The work of his life is to progress.</p>
+      <div class="a3-proverb">
+        <span class="prov-jp">七転び八起き</span>
+        <span class="prov-en">Fall seven times, rise eight</span>
+      </div>
+    </div>
+  </div>
+  <div class="a3-photos">
+    <div class="a3-photo a3-photo-a"></div>
+    <div class="a3-photo a3-photo-b"></div>
+  </div>
+</section>
+
+<!-- ══ 07 CHARACTER ══ -->
+<section class="slide" id="s7" data-i="6">
+  <div class="ch-collage">
+    <div class="cp cp-1"></div>
+    <div class="cp cp-2"></div>
+    <div class="cp cp-3"></div>
+    <div class="cp cp-4"></div>
+  </div>
+  <div class="ch-kanji">魂</div>
+  <div class="ch-divider"></div>
+  <div class="ch-content">
+    <div class="lbl" style="margin-bottom:16px;">Character Overview</div>
+    <div class="ch-title">Jiří Procházka<span class="red">。</span></div>
+    <div class="ch-body">
+      <p>Jiří fights to test himself. Where most elite athletes are driven by control, strategy, and legacy, Jiří openly invites chaos. He allows himself to be hit, to be pushed to the edge, because for him the fight is as internal as it is physical.</p>
+      <p>This comes from a longer search for something more personal — whether that's structure, meaning, or a code to live by. This makes him both unpredictable and palpably present.</p>
+      <p>He doesn't lean into trash talk or performance. He brings a straightforwardness and sincerity to this violent, unforgiving environment — his actions feel instinctive and from the heart.</p>
+      <p>For many in the Czech Republic, he represents something closer to an Olympian figure — a symbol of discipline, resilience, and pride.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 08 BACKSTORY ══ -->
+<section class="slide" id="s8" data-i="7">
+  <div class="s8-bg"></div>
+  <div style="position:absolute;right:-20px;top:50%;transform:translateY(-55%);font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(160px,22vw,280px);color:rgba(200,16,46,0.06);line-height:0.85;pointer-events:none;z-index:1;">道</div>
+  <div class="vtext" style="left:16px;top:50%;transform:translateY(-50%);z-index:2;">来歴 · Backstory · 道 · The Way</div>
+  <div class="inner">
+    <div class="lbl">Backstory — Through Line</div>
+    <div class="bs-grid">
+      <div class="body">
+        <p>Jiri Prochazka was born and raised in Hosteradice, CZ, where he still lives today.</p>
+        <p>He lost his father to a stroke at 6 years old — an absence that shaped how he made sense of male strength and responsibility. Embodying this role became his larger purpose.</p>
+        <p>As a teenager, he drifted into street fighting. Over time, he moved into organized fighting after discovering <em>The Book of Five Rings</em> — a framework focused on discipline, awareness, and self-mastery. Fighting became less about reaction and more about intention.</p>
+        <p>We follow the impact this early loss has had on him: from drifting as a teenager, to becoming the world-renowned fighter he is today.</p>
+      </div>
+      <div>
+        <div class="tl-row"><div class="tl-yr">6歳</div><div class="tl-body"><strong>Father's Death</strong><span>Becomes head of the family. Masculinity tethered to toughness.</span></div></div>
+        <div class="tl-row"><div class="tl-yr">十代</div><div class="tl-body"><strong>Street Fighting → Five Rings</strong><span>Discovers The Book of Five Rings. Discipline replaces reaction.</span></div></div>
+        <div class="tl-row"><div class="tl-yr">2019</div><div class="tl-body"><strong>Rizin — Japan</strong><span>Develops his unpredictable style. Philosophy takes real form.</span></div></div>
+        <div class="tl-row"><div class="tl-yr">2022</div><div class="tl-body"><strong>UFC Champion → Injury</strong><span>Title in three fights. Then: 1-year forced absence.</span></div></div>
+        <div class="tl-row">
+          <div class="tl-yr" style="color:var(--wh);border-color:rgba(200,16,46,0.4);">今</div>
+          <div class="tl-body" style="border-left:1px solid var(--r);padding-left:14px;margin-left:2px;border-bottom:none;">
+            <strong style="color:var(--r);">Title Fight · First Child · The Comeback</strong>
+            <span>The most pivotal chapter compressed into a single week.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 09 WHAT MAKES THIS SPECIAL ══ -->
+<section class="slide" id="s9" data-i="8">
+  <div class="s9-video"><video autoplay muted playsinline loop><source src="C1100_web.mp4" type="video/mp4"></video></div>
+  <div class="s9-overlay"></div>
+  <div class="inner">
+    <div class="lbl">What Makes This Special</div>
+    <div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:clamp(26px,3.5vw,44px);color:var(--wh);margin-bottom:4px;">なぜこの映画なのか</div>
+    <div style="font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gy);margin-bottom:0;">Why This Film</div>
+    <div class="sp-cards">
+      <div class="sp-card">
+        <div class="sp-n">一</div>
+        <div class="sp-title">Rare Access</div>
+        <p class="sp-body">Embedded within his inner circle during the most pivotal chapter of his life and career. A level of honesty and proximity that sets the film apart.</p>
+      </div>
+      <div class="sp-card">
+        <div class="sp-n">二</div>
+        <div class="sp-title">A Decade of Archive</div>
+        <p class="sp-body">Nearly a decade of archival footage captured by Jiri's personal DP — including unseen material from before his rise and pre-Rizin. What's at stake becomes clear.</p>
+      </div>
+      <div class="sp-card">
+        <div class="sp-n">三</div>
+        <div class="sp-title">Already in Production</div>
+        <p class="sp-body">A large portion of the film is already shot and extensive archives are secured. We already have the core of a story that is both expansive and deeply personal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 10 WHY NOW ══ -->
+<section class="slide" id="s10" data-i="9">
+  <div class="wn-video"><video autoplay muted playsinline loop><source src="s10_clip.mp4" type="video/mp4"></video></div>
+  <div class="wn-overlay"></div>
+  <div class="wn-kanji">今</div>
+  <div class="wn-content">
+    <div class="lbl" style="margin-bottom:16px;">Why This Film — Why Now</div>
+    <div class="wn-title">A moment that<br><span>cannot be repeated.</span></div>
+    <div class="wn-pq">This is not just a comeback story — it's a rare, inside look at a man navigating identity, purpose, and legacy at the highest level of the sport.</div>
+    <div class="wn-body">
+      <p>We've documented Jiří at a moment that cannot be repeated. Over the course of a single week, we captured him prepping for a title fight that would define his legacy, experiencing a loss that shook his sense of self, and becoming a father for the first time.</p>
+      <p>While the project has the support of Jiří's team, we have full creative control — with a shared understanding to tell a story that feels honest and raw.</p>
+      <p>Jiří has spent years shaping a persona built on discipline, philosophy, and control. But in this moment, that framework starts to shift.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ 11 APPEAL + COMPS ══ -->
+<section class="slide" id="s11" data-i="10">
+  <div class="inner">
+    <div class="lbl">Appeal</div>
+    <div class="appeal-grid">
+      <div>
+        <div class="big-stat" data-count="700" data-suffix="M">700M</div><div class="big-lbl">UFC Fans Globally · 175+ Countries</div>
+        <div class="big-stat" data-count="4.96" data-suffix="M" data-decimals="2">4.96M</div><div class="big-lbl">Views / Min · Jiri's Championship Fight</div>
+        <div class="big-stat" data-count="200" data-suffix="M+">200M+</div><div class="big-lbl">UFC Social Media Followers</div>
+        <div style="height:1px;margin:20px 0;background:linear-gradient(90deg,rgba(200,16,46,0.4),transparent);"></div>
+        <p class="body" style="font-size:12px;">At a time when a lot of young men feel lost or isolated, Jiri's path — channeling disadvantage into discipline, ambition, and belief — can serve as an example.</p>
+      </div>
+      <div>
+        <div class="comps-hd">Comparable Films</div>
+        <div class="comp-posters">
+          <div class="cp-item">
+            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMjA2YTAxMzMtNzA2Mi00NTcyLTg4NzUtODIxYzFiYzdiNWNlXkEyXkFqcGc@._V1_SX300.jpg" alt="Free Solo">
+            <div class="cp-cap"><div class="cp-title">Free Solo</div><div class="cp-dir">Elizabeth Chai Vasarhelyi & Jimmy Chin</div></div>
+          </div>
+          <div class="cp-item">
+            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BYmU4OGMwODQtYjJkMC00NDIwLWFkMmQtMmYxM2RhN2U5MWIxXkEyXkFqcGc@._V1_SX300.jpg" alt="The Alpinist">
+            <div class="cp-cap"><div class="cp-title">The Alpinist</div><div class="cp-dir">Peter Mortimer & Nick Rosen</div></div>
+          </div>
+          <div class="cp-item">
+            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BODc3NTAxMTY1MV5BMl5BanBnXkFtZTcwOTE4NjUzMw@@._V1_SX300.jpg" alt="Grizzly Man">
+            <div class="cp-cap"><div class="cp-title">Grizzly Man</div><div class="cp-dir">Werner Herzog</div></div>
+          </div>
+          <div class="cp-item">
+            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMTMxNTk3NDY1NV5BMl5BanBnXkFtZTcwNDk0ODg3MQ@@._V1_SX300.jpg" alt="Man on Wire">
+            <div class="cp-cap"><div class="cp-title">Man on Wire</div><div class="cp-dir">James Marsh</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 12 STATUS ══ -->
+<section class="slide" id="s12" data-i="11">
+  <div class="st-content">
+    <div class="lbl" style="margin-bottom:16px;">Project Status</div>
+    <p class="st-intro">Jiri is back in full training after his loss and is set to fight again this fall. We'd like to raise financing to continue production over the next few months.</p>
+    <div class="st-hd2">Production</div>
+    <ul class="stl2">
+      <li>Document Jiri's upcoming trip to Thailand</li>
+      <li>Jiri has a new team — capture him adjusting to this new dynamic</li>
+    </ul>
+    <div class="st-hd2">Post Production</div>
+    <ul class="stl2">
+      <li>Engage a director and archival producer to work with our editor</li>
+      <li>Dig through 10 years of archives collected over Jiri's career</li>
+    </ul>
+  </div>
+  <div class="st-video"><video autoplay muted playsinline loop><source src="DJI_0444_web.mp4" type="video/mp4"></video></div>
+  <div class="st-overlay"></div>
+</section>
+
+<!-- ══ 13 TONE + REFERENCES ══ -->
+<section class="slide" id="s13" data-i="12">
+  <div class="tone-kanji">美</div>
+  <div class="inner" style="display:flex;flex-direction:column;justify-content:center;gap:32px;">
+    <div>
+      <div class="lbl" style="margin-bottom:20px;">World, Structure, Tone &amp; Visual Style</div>
+      <div class="ref-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="ref-tile" onclick="openLightbox('samurai_mindset_web.mp4','The Samurai Mindset')">
+          <video class="ref-thumb" src="samurai_mindset_web.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+
+          </div>
+        </div>
+        <div class="ref-tile" onclick="openLightbox('oddly_satisfying_web.mp4','Training — 8 Minutes')">
+          <video class="ref-thumb" src="oddly_satisfying_web.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+
+          </div>
+        </div>
+        <div class="ref-tile" onclick="openLightbox('Jiri Prochazka Had To Get This Off His Chest!.mp4','Off His Chest')">
+          <video class="ref-thumb" src="Jiri Prochazka Had To Get This Off His Chest!.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+
+          </div>
+        </div>
+        <div class="ref-tile" onclick="openLightbox('DJI_0447_web.mp4','Village Footage')">
+          <video class="ref-thumb" src="DJI_0447_web.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+
+          </div>
+        </div>
+        <div class="ref-tile" onclick="openLightbox('Jiri Prochazka vs Khalil Rountree Jr. KNOCKOUT.mp4','Rountree KO')">
+          <video class="ref-thumb" src="Jiri Prochazka vs Khalil Rountree Jr. KNOCKOUT.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+
+          </div>
+        </div>
+        <div class="ref-tile" onclick="openLightbox('jiri_locked_in.mp4','Locked In')">
+          <video class="ref-thumb" src="jiri_locked_in.mp4" muted preload="metadata"></video>
+          <div class="ref-overlay">
+            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tone-text-row">
+      <p class="tone-lead" style="margin-bottom:12px;">Built from proximity rather than explanation, we envision the film unfolding in a non-linear structure.</p>
+      <div class="tone-pills">
+        <span class="tone-pill">Observational · minimal talking heads</span>
+        <span class="tone-pill">Fly on the wall</span>
+        <span class="tone-pill active">Not a highlight film</span>
+        <span class="tone-pill active">Intimate · Psychological · Immersive</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <button id="lb-close" onclick="closeLightbox()">✕</button>
+  <video id="lb-video" controls></video>
+  <div id="lb-title"></div>
+</div>
+
+<!-- ══ 14 TEAM ══ -->
+<section class="slide" id="s14" data-i="13">
+  <div class="inner">
+    <div class="lbl">Team</div>
+    <div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:clamp(26px,3.5vw,44px);color:var(--wh);margin-bottom:0;">チーム</div>
+    <div style="font-family:'Barlow',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gy);margin-bottom:0;">The Team</div>
+    <div class="team-ph"><p>Team bios — to be added</p></div>
+  </div>
+</section>
+
+<!-- ══ 15 CLOSING ══ -->
+<section class="slide" id="s15" data-i="14">
+  <div class="c-paper"></div>
+  <div class="c-sun"></div>
+  <div class="c-img"></div>
+  <svg class="c-splatter" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="112" cy="680" r="4.5" fill="rgba(10,6,4,0.55)"/>
+    <circle cx="98"  cy="710" r="2"   fill="rgba(10,6,4,0.4)"/>
+    <circle cx="130" cy="695" r="1.5" fill="rgba(10,6,4,0.35)"/>
+    <ellipse cx="88" cy="725" rx="6" ry="3" fill="rgba(10,6,4,0.45)" transform="rotate(-20 88 725)"/>
+    <circle cx="160" cy="740" r="3"   fill="rgba(10,6,4,0.3)"/>
+    <circle cx="175" cy="720" r="1.5" fill="rgba(10,6,4,0.25)"/>
+    <circle cx="210" cy="760" r="5"   fill="rgba(10,6,4,0.5)"/>
+    <circle cx="228" cy="745" r="2"   fill="rgba(10,6,4,0.35)"/>
+    <circle cx="250" cy="710" r="1"   fill="rgba(10,6,4,0.25)"/>
+    <ellipse cx="320" cy="780" rx="8" ry="4" fill="rgba(10,6,4,0.4)" transform="rotate(15 320 780)"/>
+    <circle cx="340" cy="760" r="2.5" fill="rgba(10,6,4,0.3)"/>
+    <circle cx="78"  cy="620" r="3"   fill="rgba(10,6,4,0.2)"/>
+    <circle cx="55"  cy="640" r="1.5" fill="rgba(10,6,4,0.15)"/>
+    <circle cx="1100" cy="620" r="3.5" fill="rgba(10,6,4,0.3)"/>
+    <circle cx="1120" cy="640" r="1.5" fill="rgba(10,6,4,0.2)"/>
+    <ellipse cx="1080" cy="600" rx="5" ry="2.5" fill="rgba(10,6,4,0.25)" transform="rotate(30 1080 600)"/>
+    <circle cx="950" cy="800" r="4"   fill="rgba(10,6,4,0.35)"/>
+    <circle cx="970" cy="820" r="2"   fill="rgba(10,6,4,0.25)"/>
+    <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
+  </svg>
+  <div class="c-vign"></div>
+  <div class="c-kanji">武士道</div>
+  <div class="c-title">
+    <span>UNT. JIRI</span>
+    <span>PROCHAZKA</span>
+  </div>
+</section>
+
+</div>
+
+<!-- UI -->
+<div id="ui">
+  <div id="bar"></div>
+  <div id="logo">
+    <span class="logo-unt">UNT. JIRI PROCHAZKA</span>
+    <span class="logo-sep"></span>
+    <span class="logo-jp">ジリー・プロハスカ</span>
+  </div>
+  <div id="player">
+    <button onclick="go(-1)" title="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="play-btn" onclick="togglePlay()" title="Play / Pause">
+      <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+    <button onclick="go(1)" title="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
+  </div>
+  <div id="snum">01 / 15</div>
+  <button id="prev" onclick="go(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+  <button id="next" onclick="go(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+  <div id="bottom-bar">
+    <div id="hint"><kbd>←</kbd><kbd>→</kbd>&nbsp;navigate · <kbd>Space</kbd>&nbsp;advance</div>
+    <div id="dots"></div>
+    <div style="width:120px"></div>
+  </div>
+</div>
+<audio id="bg-audio" loop preload="none">
+  <source src="" type="audio/mpeg">
+</audio>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const N=slides.length;
+let cur=0;
+function dots(){
+  const d=document.getElementById('dots');d.innerHTML='';
+  slides.forEach((_,i)=>{const e=document.createElement('div');e.className='dot'+(i===cur?' on':'');e.onclick=()=>goTo(i);d.appendChild(e);});
+}
+// Count-up animation for story stats
+function countUp(el,target,duration){
+  let start=0,step=target/60,rAF;
+  const tick=()=>{
+    start=Math.min(start+step,target);
+    el.textContent=Math.round(start);
+    if(start<target)rAF=requestAnimationFrame(tick);
+  };
+  cancelAnimationFrame(rAF); start=0; tick();
+}
+function initStoryStats(){
+  document.querySelectorAll('#s3 .cnt[data-target]').forEach(el=>{
+    countUp(el,parseInt(el.dataset.target),800);
+  });
+}
+const s3vid = document.getElementById('s3-video');
+if(s3vid){
+  s3vid.addEventListener('timeupdate',()=>{
+    if(s3vid.currentTime>=17){s3vid.currentTime=0;}
+  });
+}
+function startS3Video(){
+  if(!s3vid)return;
+  s3vid.currentTime=0;
+  s3vid.play().catch(()=>{});
+}
+function stopS3Video(){
+  if(!s3vid)return;
+  s3vid.pause();
+  s3vid.currentTime=0;
+}
+let statsRan=false;
+function goTo(i){
+  const prev=cur;
+  slides[cur].classList.remove('active');cur=Math.max(0,Math.min(N-1,i));slides[cur].classList.add('active');
+  document.getElementById('snum').textContent=String(cur+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
+  document.getElementById('bar').style.width=((cur+1)/N*100)+'%';dots();
+  if(cur===2){
+    if(!statsRan){statsRan=true;setTimeout(initStoryStats,300);}
+    startS3Video();
+  } else if(prev===2){ stopS3Video(); }
+  if(cur===10 && !countersRun){ countersRun=true; setTimeout(animateCounters,400); }
+}
+function go(d){goTo(cur+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1);}if(e.key==='ArrowLeft')go(-1);});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});
+let wt=0;
+document.addEventListener('wheel',e=>{
+  e.preventDefault();
+  if(Math.abs(e.deltaY)<40)return;
+  const now=Date.now();
+  if(now-wt<900)return;
+  wt=now;
+  go(e.deltaY>0?1:-1);
+},{passive:false});
+function tc(i){const el=document.getElementById('c'+i);const was=el.classList.contains('open');document.querySelectorAll('.comp').forEach(x=>x.classList.remove('open'));if(!was)el.classList.add('open');}
+document.querySelectorAll('.chip').forEach(el=>el.addEventListener('click',()=>el.classList.toggle('on')));
+goTo(0);
+// Music player
+const audio = document.getElementById('bg-audio');
+audio.volume = 0.6;
+let playing = false;
+function togglePlay(){
+  if(!audio.src || audio.src===window.location.href){
+    const name = prompt('Paste a path or filename for your music track (e.g. music.mp3):');
+    if(!name) return;
+    audio.src = name;
+  }
+  if(playing){ audio.pause(); playing=false; }
+  else { audio.play().catch(()=>{}); playing=true; }
+  document.getElementById('icon-play').style.display = playing?'none':'block';
+  document.getElementById('icon-pause').style.display = playing?'block':'none';
+}
+
+/* ── Parallax slide 01 ── */
+(function(){
+  const deck = document.getElementById('deck');
+  let rx=0,ry=0,tx=0,ty=0,raf=null;
+  deck.addEventListener('mousemove',e=>{
+    const s1 = document.getElementById('s1');
+    if(!s1.classList.contains('active')) return;
+    const cx=window.innerWidth/2, cy=window.innerHeight/2;
+    tx=(e.clientX-cx)/cx; ty=(e.clientY-cy)/cy;
+    if(!raf) raf=requestAnimationFrame(tick);
+  });
+  function tick(){
+    rx+=(tx-rx)*0.08; ry+=(ty-ry)*0.08;
+    const kanji=document.querySelector('#s1 .c-kanji');
+    const title=document.querySelector('#s1 .c-title');
+    const sun=document.querySelector('#s1 .c-sun');
+    if(kanji) kanji.style.transform=`translateY(-50%) translate(${rx*-18}px,${ry*-12}px)`;
+    if(title) title.style.transform=`translateY(-50%) translate(${rx*10}px,${ry*7}px)`;
+    if(sun)   sun.style.transform=`translate(-50%,-50%) translate(${rx*6}px,${ry*5}px)`;
+    if(Math.abs(tx-rx)>0.001||Math.abs(ty-ry)>0.001) raf=requestAnimationFrame(tick);
+    else raf=null;
+  }
+})();
+
+/* ── Counter animation slide 11 ── */
+function animateCounters(){
+  document.querySelectorAll('.big-stat[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count);
+    const suffix=el.dataset.suffix||'';
+    const dec=parseInt(el.dataset.decimals||0);
+    const dur=1800, start=performance.now();
+    el.textContent='0'+suffix;
+    function step(now){
+      const p=Math.min((now-start)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=(target*ease);
+      el.textContent=(dec?val.toFixed(dec):Math.round(val))+suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+let countersRun=false;
+
+function openLightbox(src, title){
+  const lb = document.getElementById('lightbox');
+  const vid = document.getElementById('lb-video');
+  document.getElementById('lb-title').textContent = title;
+  vid.src = src;
+  lb.classList.add('open');
+  vid.play().catch(()=>{});
+}
+function closeLightbox(e){
+  if(e && e.target !== document.getElementById('lightbox') && e.target !== document.getElementById('lb-close')) return;
+  const lb = document.getElementById('lightbox');
+  const vid = document.getElementById('lb-video');
+  lb.classList.remove('open');
+  vid.pause();
+  vid.src = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+/* Seek ref thumbnails to 2s for a better frame */
+document.querySelectorAll('.ref-thumb').forEach(v => {
+  v.addEventListener('loadedmetadata', () => { v.currentTime = 2; });
+});
+</script>
+</body>
+</html>
