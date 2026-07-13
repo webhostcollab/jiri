@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UNT — JIRI PROCHAZKA</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -29,7 +29,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 .vtext{
   writing-mode:vertical-rl;text-orientation:mixed;
   position:absolute;z-index:4;pointer-events:none;
-  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-family:Georgia,serif;font-weight:300;
   font-size:11px;letter-spacing:0.18em;color:rgba(200,16,46,0.3);
   line-height:1;
 }
@@ -100,7 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 }
 .logo-unt{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.2em;color:var(--wh);text-transform:uppercase;}
 .logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);}
-.logo-jp{font-family:'Noto Serif JP',serif;font-weight:300;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
+.logo-jp{font-family:Georgia,serif;font-weight:300;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
 #snum{position:absolute;top:28px;right:36px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;letter-spacing:0.25em;color:rgba(255,255,255,0.7);}
 #prev,#next{
   position:absolute;top:50%;transform:translateY(-50%);
@@ -126,7 +126,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 
 /* ─── TYPE SYSTEM ─── */
 /* Serif JP used for display headings */
-.serif{font-family:'Noto Serif JP',serif;}
+.serif{font-family:Georgia,serif;}
 
 .lbl{
   font-family:'Barlow',sans-serif;font-weight:400;
@@ -202,7 +202,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   left:48px; top:50%;
   transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(72px,11vw,148px);
   letter-spacing:0.05em;
   line-height:1;
@@ -250,14 +250,8 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   filter:grayscale(70%) contrast(1.25) brightness(0.7);
 }
 .ll-img-b{
-  background:url('GettyImages-1232512354-scaled.jpg') center 38% / cover no-repeat;
+  background:url('jiri_belt_selfie.jpg') center 30% / cover no-repeat;
   filter:grayscale(70%) contrast(1.2) brightness(0.62);
-}
-/* Fade images into black on the RIGHT edge */
-.ll-imgs::after{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to left, #000 0%, rgba(0,0,0,0.3) 30%, transparent 60%);
-  z-index:1;
 }
 
 /* Thin red vertical divider */
@@ -278,7 +272,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 /* Ghost kanji behind the quote */
 .ll-ghost{
   position:absolute; right:-16px; bottom:-60px; z-index:1;
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(180px,24vw,300px);
   color:rgba(200,16,46,0.18); line-height:1;
   pointer-events:none; letter-spacing:-0.02em;
@@ -299,7 +293,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   position:relative; z-index:2;
 }
 .ll-jp-text{
-  font-family:'Noto Serif JP',serif; font-weight:300;
+  font-family:Georgia,serif; font-weight:300;
   font-size:14px; letter-spacing:0.25em;
   color:rgba(255,255,255,0.28); writing-mode:horizontal-tb;
 }
@@ -322,8 +316,8 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s3 .st-overlay{
   position:absolute; inset:0; z-index:2; pointer-events:none;
   background:
-    linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 38%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0) 100%),
-    linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 30%);
+    linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.52) 38%, rgba(0,0,0,0.1) 65%, rgba(0,0,0,0) 100%),
+    linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 30%);
 }
 
 /* Left content zone */
@@ -376,7 +370,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .st-stat-val.red{ color:var(--r); }
 .st-stat-jp{
-  font-family:'Noto Serif JP',serif; font-weight:400;
+  font-family:Georgia,serif; font-weight:400;
   font-size:clamp(13px,1.3vw,18px); color:#1a1612;
   letter-spacing:0.05em; line-height:1;
 }
@@ -393,7 +387,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s3 .st-kanji{
   position:absolute; z-index:4; right:60px; top:50%; transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
   color:rgba(200,16,46,0.28); line-height:1;
   pointer-events:none; white-space:nowrap;
@@ -409,7 +403,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   padding:80px 32px 80px 72px; z-index:2;
 }
 #s4 .a1-title{
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(28px,3.5vw,52px); color:rgba(255,255,255,0.08);
   letter-spacing:0.05em; line-height:1; margin:0 0 20px;
 }
@@ -453,7 +447,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s4 .cc1{ width:42%; aspect-ratio:4/3; top:8%;  left:4%;  transform:rotate(-4deg); z-index:3; }
 #s4 .cc2{ width:38%; aspect-ratio:3/4; top:5%;  left:38%; transform:rotate(3deg);  z-index:4; }
 #s4 .cc3{ width:44%; aspect-ratio:4/3; top:36%; left:10%; transform:rotate(2deg);  z-index:5; }
-#s4 .cc4{ width:36%; aspect-ratio:3/4; top:30%; left:50%; transform:rotate(-2.5deg); z-index:3; }
+#s4 .cc4{ width:36%; aspect-ratio:3/4; top:30%; left:50%; transform:rotate(-2.5deg); z-index:6; }
 #s4 .cc5{ width:40%; aspect-ratio:4/3; top:62%; left:2%;  transform:rotate(-1.5deg); z-index:4; }
 #s4 .cc6{ width:38%; aspect-ratio:4/3; top:60%; left:44%; transform:rotate(3.5deg); z-index:5; }
 #s4 .a1-divider{
@@ -490,7 +484,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s5 .a2-kanji{
   position:absolute; z-index:3; left:60px; top:50%; transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
   color:rgba(200,16,46,0.2); line-height:1; pointer-events:none; white-space:nowrap;
 }
@@ -509,7 +503,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   clip-path:polygon(0 0,3% 70%,6% 20%,9% 80%,12% 30%,15% 85%,18% 35%,21% 90%,24% 40%,27% 95%,30% 45%,33% 90%,36% 40%,39% 85%,42% 30%,45% 75%,48% 20%,51% 65%,54% 10%,57% 55%,60% 0%,63% 45%,66% 90%,69% 35%,72% 80%,75% 25%,78% 70%,81% 15%,84% 60%,87% 5%,90% 50%,93% 90%,96% 35%,99% 75%,100% 20%,100% 0);
 }
 .f-torn-title{
-  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-family:Georgia,serif;font-weight:700;
   font-size:18px;color:#1a1612;margin-bottom:16px;
   padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.1);
   letter-spacing:0.05em;
@@ -524,7 +518,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 ══════════════════════════════════════════ */
 .act-bg{
   position:absolute;right:-20px;top:50%;transform:translateY(-55%);
-  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-family:Georgia,serif;font-weight:900;
   font-size:clamp(180px,26vw,320px);
   color:rgba(200,16,46,0.055);line-height:0.85;
   pointer-events:none;z-index:1;
@@ -532,7 +526,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .act-hd{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;position:relative;z-index:3;}
 .act-num{
-  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-family:Georgia,serif;font-weight:900;
   font-size:clamp(36px,5vw,64px);color:var(--r);line-height:1;
   text-shadow:0 0 30px rgba(200,16,46,0.3);
   letter-spacing:0.02em;
@@ -551,7 +545,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .act-vt-inner{
   writing-mode:vertical-rl;
-  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-family:Georgia,serif;font-weight:300;
   font-size:10px;letter-spacing:0.2em;
   color:rgba(200,16,46,0.2);
   white-space:nowrap;
@@ -562,7 +556,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .hi{border-left:1px solid var(--r);padding:16px 20px;background:rgba(200,16,46,0.04);margin-bottom:8px;}
 .hi p{font-size:13px;line-height:1.85;color:var(--lt);font-weight:300;}
 .climax-line{
-  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-family:Georgia,serif;font-weight:700;
   font-size:16px;line-height:1.5;color:var(--wh);
   padding:16px 20px;border-left:1px solid rgba(255,255,255,0.1);margin-top:8px;
 }
@@ -578,7 +572,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   background:var(--paper);
   clip-path:polygon(0 0,5% 60%,10% 10%,15% 70%,20% 20%,25% 80%,30% 30%,35% 85%,40% 35%,45% 90%,50% 40%,55% 90%,60% 35%,65% 80%,70% 25%,75% 70%,80% 15%,85% 60%,90% 5%,95% 50%,100% 0,100% 0%,0 0%);
 }
-.k-card-char{font-family:'Noto Serif JP',serif;font-weight:900;font-size:72px;color:#1a1612;line-height:1;display:block;}
+.k-card-char{font-family:Georgia,serif;font-weight:900;font-size:72px;color:#1a1612;line-height:1;display:block;}
 .k-card-rom{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-top:10px;display:block;}
 .k-card-en{font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;color:#7a7670;margin-top:3px;display:block;}
 
@@ -589,7 +583,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   border-left:1px solid rgba(200,16,46,0.25);
   display:flex;align-items:center;gap:18px;
 }
-.prov-jp{font-family:'Noto Serif JP',serif;font-weight:700;font-size:16px;color:rgba(200,16,46,0.6);white-space:nowrap;}
+.prov-jp{font-family:Georgia,serif;font-weight:700;font-size:16px;color:rgba(200,16,46,0.6);white-space:nowrap;}
 .prov-en{font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.2);}
 
 /* ══════════════════════════════════════════
@@ -635,11 +629,11 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   clip-path:polygon(0 0,4% 55%,8% 10%,12% 65%,16% 15%,20% 70%,24% 20%,28% 75%,32% 25%,36% 80%,40% 30%,44% 85%,48% 35%,52% 85%,56% 35%,60% 80%,64% 25%,68% 70%,72% 15%,76% 65%,80% 10%,84% 60%,88% 5%,92% 55%,96% 0%,100% 45%,100% 0,0 0);
 }
 .sp-n{
-  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-family:Georgia,serif;font-weight:900;
   font-size:40px;color:rgba(0,0,0,0.08);line-height:1;margin-bottom:14px;
 }
 .sp-title{
-  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-family:Georgia,serif;font-weight:700;
   font-size:13px;color:#1a1612;margin-bottom:12px;letter-spacing:0.05em;
 }
 .sp-body{font-size:12px;line-height:1.85;color:#5a5650;font-weight:300;}
@@ -649,7 +643,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 ══════════════════════════════════════════ */
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
 .pq{
-  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-family:Georgia,serif;font-weight:400;
   font-size:clamp(15px,1.8vw,20px);line-height:1.7;color:var(--wh);
   border-left:1px solid var(--r);padding-left:16px;margin-top:18px;
 }
@@ -687,7 +681,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .comp-trg{display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;}
 .comp-trg:hover .cn{color:var(--r);}
 .cn{
-  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-family:Georgia,serif;font-weight:400;
   font-size:15px;color:var(--wh);transition:color 0.2s;
   display:flex;align-items:center;gap:10px;
 }
@@ -712,7 +706,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 ══════════════════════════════════════════ */
 .st-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:36px;}
 .st-hd{
-  font-family:'Noto Serif JP',serif;font-weight:700;
+  font-family:Georgia,serif;font-weight:700;
   font-size:13px;color:var(--wh);margin-bottom:14px;
   padding-bottom:10px;border-bottom:1px solid rgba(200,16,46,0.2);
 }
@@ -725,7 +719,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 ══════════════════════════════════════════ */
 .tone-chips{display:flex;flex-wrap:wrap;gap:2px;margin:24px 0;}
 .chip{
-  font-family:'Noto Serif JP',serif;font-weight:400;
+  font-family:Georgia,serif;font-weight:400;
   font-size:clamp(18px,2.4vw,30px);letter-spacing:0.03em;
   padding:10px 20px;border:1px solid rgba(255,255,255,0.05);
   color:rgba(255,255,255,0.1);transition:all 0.22s;cursor:pointer;
@@ -753,13 +747,13 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   padding-right:60px;
 }
 .close-big-kanji{
-  font-family:'Noto Serif JP',serif;font-weight:900;
+  font-family:Georgia,serif;font-weight:900;
   font-size:clamp(80px,14vw,180px);color:rgba(200,16,46,0.18);
   line-height:0.85;letter-spacing:-0.02em;margin-bottom:20px;
   text-shadow:3px 3px 0 rgba(200,16,46,0.04), 0 4px 20px rgba(200,16,46,0.1);
 }
 .close-jp-text{
-  font-family:'Noto Serif JP',serif;font-weight:300;
+  font-family:Georgia,serif;font-weight:300;
   font-size:13px;letter-spacing:0.2em;color:rgba(200,16,46,0.35);
   margin-bottom:24px;line-height:2;
 }
@@ -873,7 +867,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .tone-pill.active{ color:var(--wh); border-color:rgba(255,255,255,0.35); }
 .tone-kanji{
   position:absolute; right:-20px; top:50%; transform:translateY(-55%);
-  font-family:'Noto Serif JP',serif; font-weight:900;
+  font-family:Georgia,serif; font-weight:900;
   font-size:clamp(160px,22vw,280px); color:rgba(200,16,46,0.05);
   line-height:0.85; pointer-events:none; z-index:1;
 }
@@ -908,7 +902,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   padding:80px 72px 80px 48px; z-index:2;
 }
 .tone-jp{
-  font-family:'Noto Serif JP',serif; font-weight:700;
+  font-family:Georgia,serif; font-weight:700;
   font-size:clamp(36px,5vw,64px); color:var(--wh);
   line-height:1.1; margin-bottom:10px;
 }
@@ -984,38 +978,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s10 .wn-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,0.95vw,13.5px); line-height:1.65; color:rgba(237,233,225,0.5); }
 #s10 .wn-body p{ margin-bottom:10px; }
 #s10 .wn-body p:last-child{ margin-bottom:0; }
-#s10 .wn-photo{
-  position:absolute; right:0; top:0; bottom:0; width:45%;
-  background:url('Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-02%20at%2011.25.42.jpeg') center 30% / cover no-repeat;
-  filter:grayscale(70%) contrast(1.2) brightness(0.55);
-}
-#s10 .wn-photo::after{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(to left, #000 0%, rgba(0,0,0,0.2) 30%, transparent 60%);
-}
-#s10 .wn-divider{
-  position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
-  background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
-}
-#s10 .wn-kanji{
-  position:absolute; z-index:1; right:48px; top:50%; transform:translateY(-50%);
-  writing-mode:vertical-rl; font-family:'Noto Serif JP',serif; font-weight:900;
-  font-size:clamp(80px,12vw,160px); color:rgba(200,16,46,0.15); line-height:1; pointer-events:none;
-}
-#s8{ background:#000; padding:0; overflow:hidden; }
-#s8 .s8-bg{
-  position:absolute; inset:0; z-index:0;
-  background:url('295-star-jiri-prochazka-channelled-858179790.webp') center 25% / cover no-repeat;
-  filter:grayscale(50%) contrast(1.1) brightness(0.7);
-}
-#s8 .s8-bg::after{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%),
-             linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
-}
-#s8 .inner{ position:relative; z-index:2; padding:80px 96px 80px 160px; }
-#s8 .body p{ color:rgba(237,233,225,0.75); }
-#s8 .tl-row{ margin-bottom:4px; }
 /* ── Slide 06 Act III ── */
 #s6{ background:#000; padding:0; overflow:hidden; }
 #s6 .a3-content{
@@ -1026,16 +988,13 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s6 .a3-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt); }
 #s6 .a3-body p{ margin-bottom:14px; }
 #s6 .a3-body p:last-child{ margin-bottom:0; }
-#s6 .a3-proverb{ border-left:2px solid var(--r); padding-left:14px; margin-top:20px; }
-#s6 .a3-proverb .prov-jp{ font-family:'Noto Serif JP',serif; font-weight:700; font-size:15px; color:rgba(200,16,46,0.7); display:block; margin-bottom:4px; }
-#s6 .a3-proverb .prov-en{ font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.3); }
 #s6 .a3-photos{
   position:absolute; right:0; top:0; bottom:0; width:45%;
   display:grid; grid-template-rows:1fr 1fr; gap:2px;
 }
 #s6 .a3-photo{ overflow:hidden; }
 #s6 .a3-photo-a{
-  background:url('slide6_top.jpg') center 40% / cover no-repeat;
+  background:url('Jiri%20Prochazka_Future%20challenge.webp') center 30% / cover no-repeat;
   filter:grayscale(70%) contrast(1.25) brightness(0.65);
 }
 #s6 .a3-photo-b{
@@ -1046,13 +1005,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s6 .a3-divider{
   position:absolute; left:55%; top:10%; bottom:10%; width:1px; z-index:3;
   background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
-}
-#s6 .a3-kanji{
-  position:absolute; z-index:1; right:50px; top:50%; transform:translateY(-50%);
-  writing-mode:vertical-rl; text-orientation:mixed;
-  font-family:'Noto Serif JP',serif; font-weight:900;
-  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
-  color:rgba(200,16,46,0.18); line-height:1; pointer-events:none; white-space:nowrap;
 }
 #s9{background:#000;overflow:hidden;}
 #s9 .s9-video{ position:absolute;inset:0;z-index:0; }
@@ -1075,7 +1027,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   display:flex; flex-direction:column; justify-content:center;
   padding:80px 72px 80px 48px; z-index:2;
 }
-#s7 .ch-title{ font-family:'Noto Serif JP',serif; font-weight:700; font-size:clamp(20px,2.6vw,34px); color:var(--wh); margin-bottom:20px; line-height:1.15; }
+#s7 .ch-title{ font-family:Georgia,serif; font-weight:700; font-size:clamp(20px,2.6vw,34px); color:var(--wh); margin-bottom:20px; line-height:1.15; }
 #s7 .ch-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,1vw,14px); line-height:1.65; color:var(--lt); }
 #s7 .ch-body p{ margin-bottom:12px; }
 #s7 .ch-body p:last-child{ margin-bottom:0; }
@@ -1088,41 +1040,83 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   content:''; position:absolute; inset:0; z-index:10; pointer-events:none;
   background:linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
 }
-#s7 .cp{
-  position:absolute;
-  background-size:cover; background-position:center;
-  filter:grayscale(40%) contrast(1.1) brightness(0.9) sepia(8%);
-  box-shadow:0 4px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
-  transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s, box-shadow 0.4s, z-index 0s;
-  cursor:pointer;
-}
-#s7 .cp:hover{
-  filter:grayscale(20%) contrast(1.1) brightness(0.85) sepia(0%);
-  box-shadow:0 20px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(200,16,46,0.3);
-  z-index:20;
-}
-#s7 .cp-1{ width:46%; height:38%; top:8%; left:6%; transform:rotate(-3deg);
-  background-image:url('Photo%20Archives%20-%20Jiri%20/Jiri_s%20friends.jpeg'); background-position:center 30%; }
-#s7 .cp-1:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
-#s7 .cp-2{ width:44%; height:36%; top:12%; left:44%; transform:rotate(2.5deg);
-  background-image:url('1315780883.webp'); background-position:center 15%; }
-#s7 .cp-2:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
-#s7 .cp-3{ width:50%; height:40%; top:44%; left:4%; transform:rotate(1.5deg);
-  background-image:url('images.jpeg'); background-position:center 25%; }
-#s7 .cp-3:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
-#s7 .cp-4{ width:42%; height:36%; top:50%; left:46%; transform:rotate(-2deg);
-  background-image:url('Photo%20Archives%20-%20Jiri%20/5d19ae3d-ecef-46f9-9166-31e19d2b734c.JPG'); background-position:center 25%; }
-#s7 .cp-4:hover{ transform:rotate(0deg) scale(1.06) translateY(-8px); }
 #s7 .ch-divider{
   position:absolute; left:52%; top:10%; bottom:10%; width:1px; z-index:3;
   background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
 }
-#s7 .ch-kanji{
-  position:absolute; z-index:1; right:48px; top:50%; transform:translateY(-50%);
-  writing-mode:vertical-rl; font-family:'Noto Serif JP',serif; font-weight:900;
-  font-size:clamp(80px,12vw,160px); color:rgba(200,16,46,0.12); line-height:1; pointer-events:none;
-}
 #s5{background:#000;}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — phones & small tablets
+═══════════════════════════════════════════ */
+@media (max-width:768px){
+  /* Slides scroll internally, stack content */
+  .slide{ display:block; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 !important; align-items:stretch; }
+  .inner{ max-width:100%; padding:96px 24px 104px; }
+
+  /* Fixed UI */
+  #logo{ top:20px; left:20px; }
+  #snum{ top:22px; right:20px; font-size:11px; }
+  #hint{ display:none; }
+
+  /* Side text zones → full-width readable panels */
+  .ll-content,
+  #s3 .st-content,
+  #s4 .a1-content,
+  #s5 .a2-content,
+  #s6 .a3-content,
+  #s7 .ch-content,
+  #s10 .wn-content,
+  #s12 .st-content{
+    position:relative !important;
+    left:auto !important; right:auto !important; top:auto !important; bottom:auto !important;
+    width:100% !important; max-width:100% !important;
+    min-height:100vh; justify-content:center;
+    padding:96px 24px 104px !important; z-index:3;
+    background:linear-gradient(to top, rgba(6,4,10,0.95) 0%, rgba(6,4,10,0.88) 55%, rgba(6,4,10,0.62) 100%);
+  }
+
+  /* Body copy: full width, comfortable size */
+  .st-body,.a1-body,.a2-body,.a3-body,.ch-body,.wn-body,.wn-pq,.st-intro{ max-width:100% !important; font-size:15px !important; line-height:1.72 !important; }
+  .ll-quote{ font-size:clamp(20px,6vw,30px) !important; }
+  .ch-title{ font-size:28px !important; }
+  .wn-title{ font-size:32px !important; }
+
+  /* Background image/video panels → full bleed behind text */
+  #s2 .ll-imgs{ position:absolute; inset:0; width:100%; grid-template-rows:1fr; z-index:0; }
+  #s2 .ll-img-b{ display:none; }
+  #s6 .a3-photos{ position:absolute; inset:0; width:100%; grid-template-rows:1fr; z-index:0; }
+  #s6 .a3-photo-b{ display:none; }
+  #s3 .st-overlay,#s5 .a2-overlay,#s10 .wn-overlay,#s12 .st-overlay{ background:rgba(6,4,10,0.25) !important; }
+
+  /* Dividers off */
+  .ll-divider,#s4 .a1-divider,#s5 .a2-divider,#s6 .a3-divider,#s7 .ch-divider,#s12 .st-divider{ display:none !important; }
+
+  /* Slide 4 collage stacks below the text */
+  #s4 .a1-photos{ position:relative !important; width:100% !important; height:76vh; z-index:1; }
+
+  /* Slide 11 Appeal → single column, posters 2×2 */
+  #s11{ padding:0 !important; }
+  #s11 .inner{ padding:96px 24px 104px; }
+  .appeal-grid{ grid-template-columns:1fr; gap:40px; }
+  .big-stat{ font-size:52px; }
+  .comp-posters{ grid-template-columns:repeat(2,1fr); gap:14px; }
+
+  /* Slide 12 stats readable over video */
+  #s12 .stl2 li{ font-size:14px; }
+
+  /* Team → single column */
+  #s14 .inner > div[style*="grid"]{ grid-template-columns:1fr !important; gap:40px !important; max-width:100% !important; }
+
+  /* Centered content slides */
+  #s8 .inner,#s9 .inner{ padding:96px 24px 104px !important; }
+  #s9 .inner > div[style*="grid"]{ grid-template-columns:1fr !important; gap:28px !important; }
+
+  /* Closing slide title inset */
+  #s15 .c-title{ left:24px; font-size:clamp(40px,11vw,64px); }
+  #s1 .c-title{ left:24px; }
+  #s1 .c-rule{ left:24px; }
+}
 </style>
 </head>
 <body>
@@ -1180,7 +1174,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <!-- ══ 03 THE STORY ══ -->
 <section class="slide" id="s3" data-i="2">
   <div class="st-video-wrap">
-    <video id="s3-video" autoplay muted playsinline preload="auto">
+    <video id="s3-video" autoplay muted playsinline loop preload="auto">
       <source src="samurai_mindset_web.mp4" type="video/mp4">
     </video>
   </div>
@@ -1210,10 +1204,10 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="a1-photos">
     <div class="c-card cc1"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40.jpeg" alt=""></div>
     <div class="c-card cc2"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41%20(3).jpeg" alt=""></div>
-    <div class="c-card cc3"><img class="c-card-img" src="rizin_espn.jpg" alt=""></div>
-    <div class="c-card cc4"><img class="c-card-img" src="rizin1.jpg" alt=""></div>
-    <div class="c-card cc5"><img class="c-card-img" src="rizin2.jpg" alt=""></div>
-    <div class="c-card cc6"><img class="c-card-img" src="rizin3.jpg" alt=""></div>
+    <div class="c-card cc3"><img class="c-card-img" src="jiri_bloody.png" alt=""></div>
+    <div class="c-card cc4"><img class="c-card-img" src="rizin_espn.jpg" alt=""></div>
+    <div class="c-card cc5"><img class="c-card-img" src="jiri_dressup.jpg" alt=""></div>
+    <div class="c-card cc6"><img class="c-card-img" src="jiri_beer.jpg" alt=""></div>
   </div>
 </section>
 
@@ -1257,7 +1251,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="ch-divider"></div>
   <div class="ch-content">
     <div class="lbl" style="margin-bottom:16px;">Character Overview</div>
-    <div class="ch-title">Jiří Procházka<span class="red">。</span></div>
+    <div class="ch-title">Jiří Procházka<span class="red">.</span></div>
     <div class="ch-body">
       <p>Jiří fights to test himself. Where most elite athletes are driven by control, strategy, and legacy, Jiří openly invites chaos. He allows himself to be hit, to be pushed to the edge, because for him the fight is as internal as it is physical.</p>
       <p>This comes from a longer search for something more personal — whether that's structure, meaning, or a code to live by. This makes him both unpredictable and palpably present.</p>
@@ -1377,7 +1371,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <section class="slide" id="s14" data-i="11">
   <div class="inner">
     <div class="lbl">The Team</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:36px;">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:36px;max-width:860px;">
       <div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,30px);color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Dylan Harris</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer</div>
@@ -1503,6 +1497,7 @@ let statsRan=false;
 function goTo(i){
   const prev=cur;
   slides[cur].classList.remove('active');cur=Math.max(0,Math.min(N-1,i));slides[cur].classList.add('active');
+  slides[cur].scrollTop=0;
   document.getElementById('snum').textContent=String(cur+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
   document.getElementById('bar').style.width=((cur+1)/N*100)+'%';dots();
   if(cur===2){
