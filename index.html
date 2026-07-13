@@ -10,7 +10,7 @@
 :root{
   --r:#C8102E; --r2:rgba(200,16,46,0.12);
   --bk:#06040a; --dk:#0d0b12; --paper:#f2ede4; --paperdim:#d4cfc6;
-  --wh:#ede9e1; --lt:#8c8880; --gy:#555450;
+  --wh:#ede9e1; --lt:#b2aea9; --gy:#908c88;
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(--wh);font-family:'Barlow',sans-serif;user-select:none;}
 
@@ -101,7 +101,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 .logo-unt{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.2em;color:var(--wh);text-transform:uppercase;}
 .logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);}
 .logo-jp{font-family:'Noto Serif JP',serif;font-weight:300;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
-#snum{position:absolute;top:28px;right:36px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.25em;color:rgba(255,255,255,0.5);}
+#snum{position:absolute;top:28px;right:36px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;letter-spacing:0.25em;color:rgba(255,255,255,0.7);}
 #prev,#next{
   position:absolute;top:50%;transform:translateY(-50%);
   width:40px;height:40px;background:transparent;border:none;
@@ -116,7 +116,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 #hint{position:absolute;right:36px;bottom:18px;}
 .dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.35);transition:all 0.3s;cursor:pointer;pointer-events:all;}
 .dot.on{background:var(--r);width:20px;border-radius:2px;}
-#hint{font-family:'Barlow Condensed',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:4px;pointer-events:all;}
+#hint{font-family:'Barlow Condensed',sans-serif;font-weight:500;font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:4px;pointer-events:all;}
 kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;font-size:9px;}
 /* music player */
 #player{position:absolute;bottom:14px;left:36px;display:flex;align-items:center;gap:2px;pointer-events:all;}
@@ -135,7 +135,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .lbl::before{content:'';width:18px;height:1px;background:var(--r);flex-shrink:0;}
 
-.body{font-size:14px;line-height:1.95;color:var(--lt);font-weight:300;max-width:560px;}
+.body{font-size:15px;line-height:1.95;color:var(--lt);font-weight:300;max-width:560px;}
 .body p{margin-bottom:16px;}
 .body p:last-child{margin-bottom:0;}
 .body em{color:var(--wh);font-style:italic;}
@@ -852,8 +852,10 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s5 .a2-content,
 #s6 .a3-content,
 #s7 .ch-content,
-#s10 .wn-content,
 #s12 .st-content { max-width: 680px; }
+#s10 .wn-content{ width:60%; padding:60px 48px 60px 72px; }
+#s10 .wn-body{ font-size:clamp(11px,0.88vw,13px); }
+#s10 .wn-pq{ font-size:clamp(12px,1vw,14px); }
 
 /* ── Slide 13 Tone + References ── */
 #s13{ background:#000; padding:0; overflow:hidden; }
@@ -1033,7 +1035,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 #s6 .a3-photo{ overflow:hidden; }
 #s6 .a3-photo-a{
-  background:url('3876803832634488980_3876776589631794876.jpg') center 30% / cover no-repeat;
+  background:url('slide6_top.jpg') center 40% / cover no-repeat;
   filter:grayscale(70%) contrast(1.25) brightness(0.65);
 }
 #s6 .a3-photo-b{
@@ -1059,7 +1061,12 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   background:linear-gradient(135deg, rgba(6,4,10,0.7) 0%, rgba(6,4,10,0.3) 100%); }
 #s9 .inner{ position:relative;z-index:2; }
 #s15{ background:#1c1208; padding:0; overflow:hidden; }
-#s15 .c-img{ background-image:url('8b3e2ec0-ea0f-11ec-bdff-169c055f8019.webp'); background-position:center 30%; filter:grayscale(40%) contrast(1.15) brightness(0.55) sepia(0.1); }
+#s15 .c-img{ position:absolute; inset:0; z-index:1; background-image:url('8b3e2ec0-ea0f-11ec-bdff-169c055f8019.webp'); background-size:cover; background-position:center 30%; filter:grayscale(40%) contrast(1.15) brightness(0.65) sepia(0.1); }
+#s15 .c-sun{ position:absolute; width:min(72vw,72vh); height:min(72vw,72vh); border-radius:50%; top:46%; left:52%; transform:translate(-50%,-50%); z-index:2; background:radial-gradient(circle at 48% 44%, #e8152e 0%, #c8102e 55%, #9a0a22 85%, rgba(100,5,15,0.4) 100%); mix-blend-mode:screen; opacity:0.7; }
+#s15 .c-paper{ position:absolute; inset:0; z-index:5; pointer-events:none; opacity:0.25; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.7 0 0 0 0 0.62 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)'/%3E%3C/svg%3E"); }
+#s15 .c-vign{ position:absolute; inset:0; z-index:4; pointer-events:none; background:linear-gradient(to top, #000 0%, #000 12%, rgba(0,0,0,0) 45%), radial-gradient(ellipse 110% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%); }
+#s15 .c-title{ position:absolute; z-index:6; top:50%; left:60px; transform:translateY(-50%); font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:clamp(48px,6.5vw,84px); line-height:0.95; letter-spacing:0.08em; color:#fff; text-transform:uppercase; }
+#s15 .c-title span{ display:block; }
 #s11{background:var(--bk);padding:60px 64px;}
 /* ── Slide 07 Character ── */
 #s7{ background:#000; padding:0; overflow:hidden; }
@@ -1149,7 +1156,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
     <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
   </svg>
   <div class="c-vign"></div>
-  <div class="c-kanji">武士道</div>
   <div class="c-title">
     <span>UNT. JIRI</span>
     <span>PROCHAZKA</span>
@@ -1163,16 +1169,11 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
     <div class="ll-img-b"></div>
   </div>
   <div class="ll-divider"></div>
-  <div class="ll-ghost">己</div>
   <div class="ll-content">
     <div class="lbl" style="margin-bottom:20px;">Logline</div>
     <p class="ll-quote">
       At the peak of his career, UFC fighter Jiří Procházka sets out to <em>reclaim his title</em> — but a devastating loss just days before the birth of his first child forces him to confront <em>who he is</em> beyond the identity he has built as a fighter.
     </p>
-    <div class="ll-jp-row">
-      <span class="ll-jp-text">己を知れ</span>
-      <span class="ll-jp-rom">Know Thyself</span>
-    </div>
   </div>
 </section>
 
@@ -1184,13 +1185,12 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
     </video>
   </div>
   <div class="st-overlay"></div>
-  <div class="st-kanji">武士道</div>
   <div class="st-content">
     <div class="lbl" style="margin-bottom:16px;">The Story</div>
     <div class="st-body">
-      <p>We met Jiří Procházka just weeks before his fight to reclaim the UFC light heavyweight championship — a moment that would define his legacy — just days before the birth of his first child.</p>
-      <p>One of the fastest-rising champions in UFC history, Procházka won the title in 2022 in just three fights, building a reputation for his unpredictable style and near-monastic commitment to <em>Japanese Samurai code</em>. A national symbol in the Czech Republic, he moves between two worlds: a quiet, minimalist life in a small Central European village, and the global stage of sold-out arenas.</p>
-      <p>What begins as a story about a championship comeback expands into a personal meditation on resilience, self-discipline, and a relentless pursuit to test limits.</p>
+      <p>We met Jiří Procházka just weeks before his fight to reclaim the UFC light heavyweight championship — just days before the birth of his first child.</p>
+      <p>One of the fastest-rising champions in UFC history, Procházka won the title in 2022 in just three fights. A national symbol in the Czech Republic, he moves between two worlds: a quiet life in a small Central European village, and the global stage of sold-out arenas.</p>
+      <p>What begins as a story about a championship comeback expands into a meditation on <em>identity, parenthood, and what remains of a man</em> when the version of himself he's built starts to fail.</p>
     </div>
   </div>
 </section>
@@ -1199,7 +1199,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <section class="slide" id="s4" data-i="3">
   <div class="a1-content">
     <div class="lbl" style="margin-bottom:12px;white-space:nowrap;">Act I — The Origin</div>
-    <div class="a1-body">
+    <div class="a1-body" style="font-size:clamp(13px,1.1vw,15px);">
       <p>Jiří's story begins in a small Czech village. After losing his father young, he found direction in <em>The Book of Five Rings</em> — a samurai text that became the foundation of how he lives, trains, and fights.</p>
       <p>In 2019 he fought in Japan's Rizin league, where his philosophy took form. He turned an ancient code into something he actually lived by.</p>
       <p>Joining UFC in 2020, his rise was immediate — three fights, one title. One of the fastest champions in the organization's history.</p>
@@ -1210,10 +1210,10 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="a1-photos">
     <div class="c-card cc1"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40.jpeg" alt=""></div>
     <div class="c-card cc2"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41%20(3).jpeg" alt=""></div>
-    <div class="c-card cc3"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41%20(4).jpeg" alt=""></div>
-    <div class="c-card cc4"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40%20(1).jpeg" alt=""></div>
-    <div class="c-card cc5"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.41.jpeg" alt=""></div>
-    <div class="c-card cc6"><img class="c-card-img" src="Photo%20Archives%20-%20Jiri%20/WhatsApp%20Image%202026-06-07%20at%2023.03.40%20(2).jpeg" alt=""></div>
+    <div class="c-card cc3"><img class="c-card-img" src="rizin_espn.jpg" alt=""></div>
+    <div class="c-card cc4"><img class="c-card-img" src="rizin1.jpg" alt=""></div>
+    <div class="c-card cc5"><img class="c-card-img" src="rizin2.jpg" alt=""></div>
+    <div class="c-card cc6"><img class="c-card-img" src="rizin3.jpg" alt=""></div>
   </div>
 </section>
 
@@ -1221,13 +1221,12 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <section class="slide" id="s5" data-i="4">
   <div class="a2-img"><video autoplay muted playsinline loop><source src="jiri_s5_clip.mp4" type="video/mp4"></video></div>
   <div class="a2-overlay"></div>
-  <div class="a2-kanji">敗北</div>
   <div class="a2-content">
     <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act II — The Loss</div>
     <div class="a2-body">
-      <p>ACT II stays close to Jiri in the weeks leading up to his fight against Ulberg — and everything that follows the loss.</p>
-      <p>The flight home to Prague, post-fight surgery, and the birth of his daughter all unfold within a matter of days.</p>
-      <p>Someone who's been widely loved is suddenly dealing with criticism in a way he never has before. We stay with him through this unexpected wave of public backlash.</p>
+      <p>Act II follows Jiri through the weeks leading up to his fight against Carlos Ulberg — and everything that follows the loss. In round one, Jiri nearly finishes it. Then he gets knocked out cold.</p>
+      <p>The flight home to Prague with a broken jaw. Surgery. An unexpected wave of public backlash from someone who has only ever been widely loved.</p>
+      <p>We stay with him through all of it — the disorientation, the grief, the silence.</p>
       <p class="a2-climax">At his lowest point mentally and emotionally — <em>his first child is born.</em></p>
     </div>
   </div>
@@ -1235,18 +1234,13 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 
 <!-- ══ 06 ACT III ══ -->
 <section class="slide" id="s6" data-i="5">
-  <div class="a3-kanji">再生</div>
   <div class="a3-divider"></div>
   <div class="a3-content">
     <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act III — The Rebuild</div>
     <div class="a3-body">
-      <p>The birth of Jiri's daughter Elenka reframes everything. There's something immediate and external that carries weight — and freedom is lost in the process.</p>
-      <p>At the same time, he's restructuring his team, letting go of what isn't working, facing the backlash from his loss and finding strength in changing course.</p>
-      <p>Climb Mount Fuji. Trip to Thailand. Perseverance — resilience. The work of his life is to progress.</p>
-      <div class="a3-proverb">
-        <span class="prov-jp">七転び八起き</span>
-        <span class="prov-en">Fall seven times, rise eight</span>
-      </div>
+      <p>The birth of Jiri's daughter Elenka reframes everything. There's something immediate and external that now carries weight — and with it, a version of freedom is lost.</p>
+      <p>He restructures his team, lets go of what isn't working, and faces the backlash from his loss. Finding strength not in winning, but in changing course.</p>
+      <p>Climb Mount Fuji. Training camp in Thailand. The road back to MSG — and the light heavyweight championship.</p>
     </div>
   </div>
   <div class="a3-photos">
@@ -1258,12 +1252,8 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <!-- ══ 07 CHARACTER ══ -->
 <section class="slide" id="s7" data-i="6">
   <div class="ch-collage">
-    <div class="cp cp-1"></div>
-    <div class="cp cp-2"></div>
-    <div class="cp cp-3"></div>
-    <div class="cp cp-4"></div>
+    <video autoplay muted playsinline loop style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(40%) contrast(1.1) brightness(0.85);"><source src="slide7_web.mp4" type="video/mp4"></video>
   </div>
-  <div class="ch-kanji">魂</div>
   <div class="ch-divider"></div>
   <div class="ch-content">
     <div class="lbl" style="margin-bottom:16px;">Character Overview</div>
@@ -1277,85 +1267,48 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   </div>
 </section>
 
-<!-- ══ 08 BACKSTORY ══ -->
-<section class="slide" id="s8" data-i="7">
-  <div class="s8-bg"></div>
-  <div style="position:absolute;right:-20px;top:50%;transform:translateY(-55%);font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(160px,22vw,280px);color:rgba(200,16,46,0.06);line-height:0.85;pointer-events:none;z-index:1;">道</div>
-  <div class="vtext" style="left:16px;top:50%;transform:translateY(-50%);z-index:2;">来歴 · Backstory · 道 · The Way</div>
-  <div class="inner">
-    <div class="lbl">Backstory — Through Line</div>
-    <div class="bs-grid">
-      <div class="body">
-        <p>Jiri Prochazka was born and raised in Hosteradice, CZ, where he still lives today.</p>
-        <p>He lost his father to a stroke at 6 years old — an absence that shaped how he made sense of male strength and responsibility. Embodying this role became his larger purpose.</p>
-        <p>As a teenager, he drifted into street fighting. Over time, he moved into organized fighting after discovering <em>The Book of Five Rings</em> — a framework focused on discipline, awareness, and self-mastery. Fighting became less about reaction and more about intention.</p>
-        <p>We follow the impact this early loss has had on him: from drifting as a teenager, to becoming the world-renowned fighter he is today.</p>
+<!-- ══ 08 WHAT MAKES THIS SPECIAL ══ -->
+<section class="slide" id="s9" data-i="7">
+  <div class="s9-video"><video autoplay muted playsinline loop><source src="before_fight_web.mp4" type="video/mp4"></video></div>
+  <div class="s9-overlay"></div>
+  <div class="inner" style="max-width:min(860px,80vw);">
+    <div class="lbl">What Makes This Special</div>
+    <p style="font-family:'Barlow Condensed',sans-serif;font-weight:300;font-size:clamp(22px,2.8vw,38px);line-height:1.25;color:var(--wh);letter-spacing:0.02em;margin-bottom:32px;">We've captured Jiří Procházka at a moment that <em style="color:var(--r);font-style:normal;">can never be repeated.</em></p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Rare Access</div>
+        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">Embedded within his inner circle during the most pivotal chapter of his life and career — a level of honesty and proximity rarely available to documentary filmmaking.</p>
       </div>
       <div>
-        <div class="tl-row"><div class="tl-yr">6歳</div><div class="tl-body"><strong>Father's Death</strong><span>Becomes head of the family. Masculinity tethered to toughness.</span></div></div>
-        <div class="tl-row"><div class="tl-yr">十代</div><div class="tl-body"><strong>Street Fighting → Five Rings</strong><span>Discovers The Book of Five Rings. Discipline replaces reaction.</span></div></div>
-        <div class="tl-row"><div class="tl-yr">2019</div><div class="tl-body"><strong>Rizin — Japan</strong><span>Develops his unpredictable style. Philosophy takes real form.</span></div></div>
-        <div class="tl-row"><div class="tl-yr">2022</div><div class="tl-body"><strong>UFC Champion → Injury</strong><span>Title in three fights. Then: 1-year forced absence.</span></div></div>
-        <div class="tl-row">
-          <div class="tl-yr" style="color:var(--wh);border-color:rgba(200,16,46,0.4);">今</div>
-          <div class="tl-body" style="border-left:1px solid var(--r);padding-left:14px;margin-left:2px;border-bottom:none;">
-            <strong style="color:var(--r);">Title Fight · First Child · The Comeback</strong>
-            <span>The most pivotal chapter compressed into a single week.</span>
-          </div>
-        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">A Decade of Archive</div>
+        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">Over a decade of never-seen archival materials secured — including footage from before his rise, pre-Rizin, and through his ascent to champion.</p>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Already in Production</div>
+        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">A large portion of the film has already been shot. Jiří has granted full creative control — with a shared interest in telling a story that feels honest and raw.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ 09 WHAT MAKES THIS SPECIAL ══ -->
-<section class="slide" id="s9" data-i="8">
-  <div class="s9-video"><video autoplay muted playsinline loop><source src="C1100_web.mp4" type="video/mp4"></video></div>
-  <div class="s9-overlay"></div>
-  <div class="inner">
-    <div class="lbl">What Makes This Special</div>
-    <div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:clamp(26px,3.5vw,44px);color:var(--wh);margin-bottom:4px;">なぜこの映画なのか</div>
-    <div style="font-family:'Barlow',sans-serif;font-weight:300;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gy);margin-bottom:0;">Why This Film</div>
-    <div class="sp-cards">
-      <div class="sp-card">
-        <div class="sp-n">一</div>
-        <div class="sp-title">Rare Access</div>
-        <p class="sp-body">Embedded within his inner circle during the most pivotal chapter of his life and career. A level of honesty and proximity that sets the film apart.</p>
-      </div>
-      <div class="sp-card">
-        <div class="sp-n">二</div>
-        <div class="sp-title">A Decade of Archive</div>
-        <p class="sp-body">Nearly a decade of archival footage captured by Jiri's personal DP — including unseen material from before his rise and pre-Rizin. What's at stake becomes clear.</p>
-      </div>
-      <div class="sp-card">
-        <div class="sp-n">三</div>
-        <div class="sp-title">Already in Production</div>
-        <p class="sp-body">A large portion of the film is already shot and extensive archives are secured. We already have the core of a story that is both expansive and deeply personal.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 10 WHY NOW ══ -->
-<section class="slide" id="s10" data-i="9">
-  <div class="wn-video"><video autoplay muted playsinline loop><source src="s10_clip.mp4" type="video/mp4"></video></div>
+<!-- ══ 09 WHY NOW ══ -->
+<section class="slide" id="s10" data-i="8">
+  <div class="wn-video"><video autoplay muted playsinline loop><source src="s10_teixeira_web.mp4" type="video/mp4"></video></div>
   <div class="wn-overlay"></div>
-  <div class="wn-kanji">今</div>
   <div class="wn-content">
     <div class="lbl" style="margin-bottom:16px;">Why This Film — Why Now</div>
-    <div class="wn-title">A moment that<br><span>cannot be repeated.</span></div>
-    <div class="wn-pq">This is not just a comeback story — it's a rare, inside look at a man navigating identity, purpose, and legacy at the highest level of the sport.</div>
+    <div class="wn-title">Behind the myth,<br><span>a man.</span></div>
+    <div class="wn-pq">This is not just a comeback story. It's an intimate portrait of a man navigating identity, purpose, and legacy at the highest level of combat sports — just as the foundation of his life abruptly changes course.</div>
     <div class="wn-body">
-      <p>We've documented Jiří at a moment that cannot be repeated. Over the course of a single week, we captured him prepping for a title fight that would define his legacy, experiencing a loss that shook his sense of self, and becoming a father for the first time.</p>
-      <p>While the project has the support of Jiří's team, we have full creative control — with a shared understanding to tell a story that feels honest and raw.</p>
-      <p>Jiří has spent years shaping a persona built on discipline, philosophy, and control. But in this moment, that framework starts to shift.</p>
+      <p>Masculinity has been at the forefront of conversation for more than a decade. In an era of shifting identity, young men are looking not to those who foster a good life, but those who garner the most attention.</p>
+      <p>UFC has one of the youngest and most male-skewing audiences in major sports — more than 70% of its fanbase are males 18–49. Combat sports stars of the modern era tend to be bombastic and arrogant. Jiri is the counterpoint to all of this.</p>
+      <p>He does not view winning as fuel for his ego, but a reflection of his honor and discipline. He lives by a code that seems to have disappeared from modern western society — and yet is still a champion, still a star, and still a fan favorite.</p>
     </div>
   </div>
-
 </section>
 
-<!-- ══ 11 APPEAL + COMPS ══ -->
-<section class="slide" id="s11" data-i="10">
+<!-- ══ 10 APPEAL + COMPS ══ -->
+<section class="slide" id="s11" data-i="9">
   <div class="inner">
     <div class="lbl">Appeal</div>
     <div class="appeal-grid">
@@ -1392,86 +1345,25 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   </div>
 </section>
 
-<!-- ══ 12 STATUS ══ -->
-<section class="slide" id="s12" data-i="11">
+<!-- ══ 11 STATUS ══ -->
+<section class="slide" id="s12" data-i="10">
   <div class="st-content">
     <div class="lbl" style="margin-bottom:16px;">Project Status</div>
-    <p class="st-intro">Jiri is back in full training after his loss and is set to fight again this fall. We'd like to raise financing to continue production over the next few months.</p>
+    <p class="st-intro">Jiri is back in full training after his loss and is preparing for his next fight. We'd like to raise financing to continue production over the coming months.</p>
     <div class="st-hd2">Production</div>
     <ul class="stl2">
-      <li>Document Jiri's upcoming trip to Thailand</li>
-      <li>Jiri has a new team — capture him adjusting to this new dynamic</li>
+      <li>Document Jiri's upcoming training camp in Thailand</li>
+      <li>Jiri has restructured his team — capture him adjusting to this new dynamic</li>
+      <li>Follow the road back to MSG and the light heavyweight championship</li>
     </ul>
     <div class="st-hd2">Post Production</div>
     <ul class="stl2">
       <li>Engage a director and archival producer to work with our editor</li>
-      <li>Dig through 10 years of archives collected over Jiri's career</li>
+      <li>Dig through over a decade of archives collected across Jiri's career</li>
     </ul>
   </div>
-  <div class="st-video"><video autoplay muted playsinline loop><source src="DJI_0444_web.mp4" type="video/mp4"></video></div>
+  <div class="st-video"><video autoplay muted playsinline loop><source src="before_fight_web.mp4" type="video/mp4"></video></div>
   <div class="st-overlay"></div>
-</section>
-
-<!-- ══ 13 TONE + REFERENCES ══ -->
-<section class="slide" id="s13" data-i="12">
-  <div class="tone-kanji">美</div>
-  <div class="inner" style="display:flex;flex-direction:column;justify-content:center;gap:32px;">
-    <div>
-      <div class="lbl" style="margin-bottom:20px;">World, Structure, Tone &amp; Visual Style</div>
-      <div class="ref-grid" style="grid-template-columns:repeat(3,1fr);">
-        <div class="ref-tile" onclick="openLightbox('samurai_mindset_web.mp4','The Samurai Mindset')">
-          <video class="ref-thumb" src="samurai_mindset_web.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-
-          </div>
-        </div>
-        <div class="ref-tile" onclick="openLightbox('oddly_satisfying_web.mp4','Training — 8 Minutes')">
-          <video class="ref-thumb" src="oddly_satisfying_web.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-
-          </div>
-        </div>
-        <div class="ref-tile" onclick="openLightbox('Jiri Prochazka Had To Get This Off His Chest!.mp4','Off His Chest')">
-          <video class="ref-thumb" src="Jiri Prochazka Had To Get This Off His Chest!.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-
-          </div>
-        </div>
-        <div class="ref-tile" onclick="openLightbox('DJI_0447_web.mp4','Village Footage')">
-          <video class="ref-thumb" src="DJI_0447_web.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-
-          </div>
-        </div>
-        <div class="ref-tile" onclick="openLightbox('Jiri Prochazka vs Khalil Rountree Jr. KNOCKOUT.mp4','Rountree KO')">
-          <video class="ref-thumb" src="Jiri Prochazka vs Khalil Rountree Jr. KNOCKOUT.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-
-          </div>
-        </div>
-        <div class="ref-tile" onclick="openLightbox('jiri_locked_in.mp4','Locked In')">
-          <video class="ref-thumb" src="jiri_locked_in.mp4" muted preload="metadata"></video>
-          <div class="ref-overlay">
-            <div class="ref-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="tone-text-row">
-      <p class="tone-lead" style="margin-bottom:12px;">Built from proximity rather than explanation, we envision the film unfolding in a non-linear structure.</p>
-      <div class="tone-pills">
-        <span class="tone-pill">Observational · minimal talking heads</span>
-        <span class="tone-pill">Fly on the wall</span>
-        <span class="tone-pill active">Not a highlight film</span>
-        <span class="tone-pill active">Intimate · Psychological · Immersive</span>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- Lightbox -->
@@ -1481,18 +1373,29 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div id="lb-title"></div>
 </div>
 
-<!-- ══ 14 TEAM ══ -->
-<section class="slide" id="s14" data-i="13">
+<!-- ══ 12 TEAM ══ -->
+<section class="slide" id="s14" data-i="11">
   <div class="inner">
-    <div class="lbl">Team</div>
-    <div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:clamp(26px,3.5vw,44px);color:var(--wh);margin-bottom:0;">チーム</div>
-    <div style="font-family:'Barlow',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gy);margin-bottom:0;">The Team</div>
-    <div class="team-ph"><p>Team bios — to be added</p></div>
+    <div class="lbl">The Team</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:36px;">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,30px);color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Dylan Harris</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer</div>
+        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;">International producer whose projects have premiered at Sundance, Tribeca, and Netflix, with credits spanning independent feature documentaries, unscripted pilots, and premium series.</p>
+        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;margin-top:14px;">Most recently produced <em style="color:var(--wh);">John Carpenter's Suburban Screams</em> documentary series for Peacock.</p>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,30px);color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Jan Bezouška</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer — Cowboy Studio</div>
+        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;">Los Angeles-based producer from the Czech Republic. Spent the past decade working inside the film world, collaborating with major studios, filmmakers, and cultural brands including Sony Pictures, Universal, Netflix, Kanye West, and Beyoncé's Ivy Park.</p>
+        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;margin-top:14px;">Now leads <em style="color:var(--wh);">Cowboy Studio</em> — <span style="color:rgba(255,255,255,0.35);font-size:12px;">cowboy-studio.com</span></p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ══ 15 CLOSING ══ -->
-<section class="slide" id="s15" data-i="14">
+<!-- ══ 13 CLOSING ══ -->
+<section class="slide" id="s15" data-i="12">
   <div class="c-paper"></div>
   <div class="c-sun"></div>
   <div class="c-img"></div>
@@ -1518,7 +1421,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
     <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
   </svg>
   <div class="c-vign"></div>
-  <div class="c-kanji">武士道</div>
   <div class="c-title">
     <span>UNT. JIRI</span>
     <span>PROCHAZKA</span>
@@ -1532,8 +1434,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div id="bar"></div>
   <div id="logo">
     <span class="logo-unt">UNT. JIRI PROCHAZKA</span>
-    <span class="logo-sep"></span>
-    <span class="logo-jp">ジリー・プロハスカ</span>
   </div>
   <div id="player">
     <button onclick="go(-1)" title="Previous">
@@ -1547,7 +1447,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg>
     </button>
   </div>
-  <div id="snum">01 / 15</div>
+  <div id="snum">01 / 13</div>
   <button id="prev" onclick="go(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>
   <button id="next" onclick="go(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg></button>
   <div id="bottom-bar">
@@ -1609,7 +1509,7 @@ function goTo(i){
     if(!statsRan){statsRan=true;setTimeout(initStoryStats,300);}
     startS3Video();
   } else if(prev===2){ stopS3Video(); }
-  if(cur===10 && !countersRun){ countersRun=true; setTimeout(animateCounters,400); }
+  if(cur===9 && !countersRun){ countersRun=true; setTimeout(animateCounters,400); }
 }
 function go(d){goTo(cur+d);}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1);}if(e.key==='ArrowLeft')go(-1);});
