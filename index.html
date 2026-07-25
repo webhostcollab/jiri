@@ -11,19 +11,33 @@
   --r:#C8102E; --r2:rgba(200,16,46,0.12);
   --bk:#06040a; --dk:#0d0b12; --paper:#f2ede4; --paperdim:#d4cfc6;
   --wh:#ede9e1; --lt:#b2aea9; --gy:#908c88;
+  /* Unified type scale — one body size across every slide, scales with viewport so it stays legible on large screens */
+  --fs-body: 17px;
+  --lh-body: 1.4;
+  --fs-lead: 32px;
 }
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(--wh);font-family:'Barlow',sans-serif;user-select:none;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--wh);font-family:'Barlow',sans-serif;user-select:none;}
+
+/* ─── FIXED PDF CANVAS ─── */
+/* The whole deck is a fixed 1280×800 page that scales uniformly to fit any screen (letterboxed). */
+#stage{
+  position:absolute; top:50%; left:50%;
+  width:1280px; height:800px;
+  transform:translate(-50%,-50%) scale(var(--pdf-scale,1));
+  transform-origin:center center;
+  background:var(--bk); overflow:hidden;
+}
 
 /* ─── DECK ─── */
-#deck{position:fixed;inset:0;}
+#deck{position:absolute;inset:0;}
 .slide{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  padding:clamp(60px,6vh,100px) clamp(80px,7vw,140px);
+  padding:60px 90px;
   opacity:0;pointer-events:none;overflow:hidden;
   transition:opacity 0.55s ease;
 }
 .slide.active{opacity:1;pointer-events:all;}
-.inner{width:100%;max-width:min(1400px,88vw);position:relative;z-index:3;}
+.inner{width:100%;max-width:1126px;position:relative;z-index:3;}
 
 /* ─── VERTICAL VERT TEXT ─── */
 .vtext{
@@ -92,7 +106,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 .brush-rule{display:block;width:100%;overflow:visible;height:12px;margin:20px 0;}
 
 /* ─── UI ─── */
-#ui{position:fixed;inset:0;pointer-events:none;z-index:200;}
+#ui{position:absolute;inset:0;pointer-events:none;z-index:200;}
 #bar{position:absolute;top:0;left:0;height:2px;background:var(--r);transition:width 0.5s ease;box-shadow:0 0 12px rgba(200,16,46,0.6);}
 #logo{
   position:absolute;top:26px;left:36px;
@@ -111,18 +125,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bk);color:var(
 #prev{left:20px;}#next{right:20px;}
 #prev:hover,#next:hover{color:var(--r);}
 #prev svg,#next svg{width:20px;height:20px;}
-#bottom-bar{position:absolute;bottom:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;padding:0 36px;}
-#dots{display:flex;gap:6px;align-items:center;pointer-events:all;}
-#hint{position:absolute;right:36px;bottom:18px;}
+#bottom-bar{position:absolute;bottom:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;}
+#dots{display:flex;gap:6px;align-items:center;pointer-events:all;position:absolute;left:50%;transform:translateX(-50%);}
 .dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.35);transition:all 0.3s;cursor:pointer;pointer-events:all;}
 .dot.on{background:var(--r);width:20px;border-radius:2px;}
 #hint{font-family:'Barlow Condensed',sans-serif;font-weight:500;font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:4px;pointer-events:all;}
 kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;font-size:9px;}
-/* music player */
-#player{position:absolute;bottom:14px;left:36px;display:flex;align-items:center;gap:2px;pointer-events:all;}
-#player button{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.45);width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;padding:0;}
-#player button:hover{color:var(--r);}
-#player button svg{width:14px;height:14px;}
+#fs-btn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.55);width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;padding:0;pointer-events:all;}
+#fs-btn:hover{color:var(--r);}
+#fs-btn svg{width:18px;height:18px;}
 
 /* ─── TYPE SYSTEM ─── */
 /* Serif JP used for display headings */
@@ -156,22 +167,6 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s1 .c-img{
   position:absolute; inset:0; z-index:1;
   background:url('c9b606cc-untitled-design-2023-11-08t100058.392.jpg') 52% 22% / cover no-repeat;
-  filter:grayscale(100%) contrast(3.8) brightness(0.62) sepia(0.18);
-}
-
-/* Red sun — multiply blend so it deepens into the photo naturally, like a painted seal */
-#s1 .c-sun{
-  position:absolute;
-  width: min(72vw, 72vh);
-  height: min(72vw, 72vh);
-  border-radius:50%;
-  top:46%; left:52%;
-  transform:translate(-50%, -50%);
-  z-index:2;
-  /* Soft edge to feel hand-painted, not vector */
-  background:radial-gradient(circle at 48% 44%, #e8152e 0%, #c8102e 55%, #9a0a22 85%, rgba(100,5,15,0.4) 100%);
-  mix-blend-mode:screen;
-  opacity:0.82;
 }
 
 /* Paper grain texture — overlay blend works on dark backgrounds */
@@ -203,7 +198,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(72px,11vw,148px);
+  font-size:141px;
   letter-spacing:0.05em;
   line-height:1;
   color:rgba(200,16,46,0.22);
@@ -218,7 +213,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   transform:translateY(-50%);
   font-family:'Barlow Condensed',sans-serif;
   font-weight:800;
-  font-size:clamp(48px,6.5vw,84px);
+  font-size:83px;
   line-height:0.95;
   letter-spacing:0.08em;
   color:#fff;
@@ -230,7 +225,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s1 .c-rule{
   position:absolute; z-index:6;
   top:50%; left:60px;
-  transform:translateY(calc(-50% - clamp(48px,6.5vw,84px)*2*0.95 - 20px));
+  transform:translateY(calc(-50% - 83px*2*0.95 - 20px));
   width:48px; height:2px;
   background:var(--r);
 }
@@ -250,7 +245,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   filter:grayscale(70%) contrast(1.25) brightness(0.7);
 }
 .ll-img-b{
-  background:url('jiri_belt_selfie.jpg') center 30% / cover no-repeat;
+  background:url('jiri_belt_champ.jpg') center 20% / cover no-repeat;
   filter:grayscale(70%) contrast(1.2) brightness(0.62);
 }
 
@@ -273,7 +268,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .ll-ghost{
   position:absolute; right:-16px; bottom:-60px; z-index:1;
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(180px,24vw,300px);
+  font-size:300px;
   color:rgba(200,16,46,0.18); line-height:1;
   pointer-events:none; letter-spacing:-0.02em;
 }
@@ -281,7 +276,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 /* Quote — Barlow Condensed light, large, editorial */
 .ll-quote{
   font-family:'Barlow Condensed',sans-serif; font-weight:300;
-  font-size:clamp(20px,2.4vw,36px); line-height:1.2;
+  font-size:31px; line-height:1.2;
   color:rgba(237,233,225,0.88); letter-spacing:0.03em;
   position:relative; z-index:2;
 }
@@ -337,7 +332,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .st-body{
   max-width:46ch;
   font-family:'Barlow',sans-serif; font-weight:300;
-  font-size:clamp(13px,1.05vw,15px); line-height:1.6;
+  font-size:var(--fs-body); line-height:var(--lh-body);
   color:var(--lt);
 }
 .st-body p{ margin-bottom:12px; }
@@ -365,13 +360,13 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .st-stat:last-child{ border-right:none; padding-right:0; margin-right:0; }
 .st-stat-val{
   font-family:'Barlow Condensed',sans-serif;
-  font-weight:700; font-size:clamp(14px,1.5vw,20px);
+  font-weight:700; font-size:19px;
   color:#1a1612; line-height:1; letter-spacing:0.02em;
 }
 .st-stat-val.red{ color:var(--r); }
 .st-stat-jp{
   font-family:Georgia,serif; font-weight:400;
-  font-size:clamp(13px,1.3vw,18px); color:#1a1612;
+  font-size:17px; color:#1a1612;
   letter-spacing:0.05em; line-height:1;
 }
 .st-stat-lbl{
@@ -388,7 +383,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   position:absolute; z-index:4; right:60px; top:50%; transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
+  font-size:154px; letter-spacing:0.08em;
   color:rgba(200,16,46,0.28); line-height:1;
   pointer-events:none; white-space:nowrap;
 }
@@ -404,12 +399,12 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 #s4 .a1-title{
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(28px,3.5vw,52px); color:rgba(255,255,255,0.08);
+  font-size:45px; color:rgba(255,255,255,0.08);
   letter-spacing:0.05em; line-height:1; margin:0 0 20px;
 }
 #s4 .a1-body{
   font-family:'Barlow',sans-serif; font-weight:300;
-  font-size:clamp(13px,1.1vw,15px); line-height:1.65;
+  font-size:14px; line-height:1.65;
   color:var(--lt);
 }
 #s4 .a1-body p{ margin-bottom:14px; }
@@ -471,7 +466,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 #s5 .a2-body{
   font-family:'Barlow',sans-serif; font-weight:300;
-  font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt);
+  font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt);
 }
 #s5 .a2-body p{ margin-bottom:14px; }
 #s5 .a2-body p:last-child{ margin-bottom:0; }
@@ -485,7 +480,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   position:absolute; z-index:3; left:60px; top:50%; transform:translateY(-50%);
   writing-mode:vertical-rl; text-orientation:mixed;
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(80px,12vw,160px); letter-spacing:0.08em;
+  font-size:154px; letter-spacing:0.08em;
   color:rgba(200,16,46,0.2); line-height:1; pointer-events:none; white-space:nowrap;
 }
 
@@ -519,7 +514,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .act-bg{
   position:absolute;right:-20px;top:50%;transform:translateY(-55%);
   font-family:Georgia,serif;font-weight:900;
-  font-size:clamp(180px,26vw,320px);
+  font-size:320px;
   color:rgba(200,16,46,0.055);line-height:0.85;
   pointer-events:none;z-index:1;
   text-shadow:2px 2px 0 rgba(200,16,46,0.03),-1px -1px 0 rgba(200,16,46,0.02);
@@ -527,7 +522,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .act-hd{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;position:relative;z-index:3;}
 .act-num{
   font-family:Georgia,serif;font-weight:900;
-  font-size:clamp(36px,5vw,64px);color:var(--r);line-height:1;
+  font-size:64px;color:var(--r);line-height:1;
   text-shadow:0 0 30px rgba(200,16,46,0.3);
   letter-spacing:0.02em;
 }
@@ -644,7 +639,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
 .pq{
   font-family:Georgia,serif;font-weight:400;
-  font-size:clamp(15px,1.8vw,20px);line-height:1.7;color:var(--wh);
+  font-size:20px;line-height:1.7;color:var(--wh);
   border-left:1px solid var(--r);padding-left:16px;margin-top:18px;
 }
 
@@ -662,8 +657,14 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--gy);margin-bottom:22px;
 }
-.comp-posters{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:4px; }
-.cp-item{ display:flex; flex-direction:column; gap:10px; }
+/* Appeal — prose + comps */
+.appeal-prose{ column-count:2; column-gap:52px; margin:18px 0 24px; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt); font-weight:300; }
+.appeal-prose p{ margin-bottom:12px; break-inside:avoid; }
+.appeal-prose p:last-child{ margin-bottom:0; }
+.appeal-stat{ color:var(--r); font-weight:600; }
+.appeal-comps{ border-top:1px solid rgba(255,255,255,0.1); padding-top:18px; }
+.comp-posters{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:4px; max-width:680px; }
+.cp-item{ display:flex; flex-direction:column; gap:8px; }
 .cp-poster-img{ width:100%; aspect-ratio:2/3; object-fit:cover; display:block;
   filter:grayscale(30%) contrast(1.05); border:1px solid rgba(255,255,255,0.06);
   transition:filter 0.3s, transform 0.3s; }
@@ -720,7 +721,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .tone-chips{display:flex;flex-wrap:wrap;gap:2px;margin:24px 0;}
 .chip{
   font-family:Georgia,serif;font-weight:400;
-  font-size:clamp(18px,2.4vw,30px);letter-spacing:0.03em;
+  font-size:30px;letter-spacing:0.03em;
   padding:10px 20px;border:1px solid rgba(255,255,255,0.05);
   color:rgba(255,255,255,0.1);transition:all 0.22s;cursor:pointer;
 }
@@ -740,7 +741,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 ══════════════════════════════════════════ */
 .close-wrap{
   display:grid;grid-template-columns:1fr 1fr;
-  align-items:center;min-height:calc(100vh - 160px);gap:0;
+  align-items:center;min-height:640px;gap:0;
 }
 .close-left{
   border-right:1px solid rgba(200,16,46,0.2);
@@ -748,7 +749,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .close-big-kanji{
   font-family:Georgia,serif;font-weight:900;
-  font-size:clamp(80px,14vw,180px);color:rgba(200,16,46,0.18);
+  font-size:179px;color:rgba(200,16,46,0.18);
   line-height:0.85;letter-spacing:-0.02em;margin-bottom:20px;
   text-shadow:3px 3px 0 rgba(200,16,46,0.04), 0 4px 20px rgba(200,16,46,0.1);
 }
@@ -760,7 +761,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .close-right{padding-left:60px;}
 .close-title{
   font-family:'Barlow Condensed',sans-serif;font-weight:900;
-  font-size:clamp(52px,8vw,100px);text-transform:uppercase;
+  font-size:100px;text-transform:uppercase;
   line-height:0.85;letter-spacing:-0.01em;color:var(--wh);
   margin-bottom:20px;
 }
@@ -769,6 +770,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 
 /* Slide backgrounds */
 #s13,#s14{background:var(--dk);}
+#s14 .team-portrait{ width:150px; height:188px; object-fit:cover; object-position:center 15%; display:block; margin-bottom:20px; filter:grayscale(100%) contrast(1.05); border:1px solid rgba(255,255,255,0.1); }
 /* ── Slide 12 Status ── */
 #s12{ background:#000; padding:0; overflow:hidden; }
 #s12 .st-content{
@@ -776,7 +778,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   display:flex; flex-direction:column; justify-content:center;
   padding:80px 48px 80px 72px; z-index:2;
 }
-#s12 .st-intro{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt); margin-bottom:28px; }
+#s12 .st-intro{ font-family:'Barlow',sans-serif; font-weight:300; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt); margin-bottom:28px; }
 #s12 .st-hd2{ font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:10px; letter-spacing:0.35em; text-transform:uppercase; color:var(--r); margin-bottom:10px; }
 #s12 .stl2{ list-style:none; margin-bottom:24px; }
 #s12 .stl2 li{ font-size:13px; line-height:1.7; color:var(--lt); font-weight:300; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.04); display:flex; gap:10px; }
@@ -842,14 +844,16 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   text-shadow:0 1px 4px rgba(0,0,0,0.9);
 }
 /* ── Column width cap — keeps lines readable on large displays ── */
-#s4 .a1-content,
 #s5 .a2-content,
 #s6 .a3-content,
 #s7 .ch-content,
 #s12 .st-content { max-width: 680px; }
-#s10 .wn-content{ width:60%; padding:60px 48px 60px 72px; }
-#s10 .wn-body{ font-size:clamp(11px,0.88vw,13px); }
-#s10 .wn-pq{ font-size:clamp(12px,1vw,14px); }
+/* Act I carries the most copy — widen its panel and flow the body in two columns so type stays full size */
+#s4 .a1-content{ width:56%; max-width:none; padding:64px 40px 64px 72px; }
+#s4 .a1-photos{ width:44%; }
+#s4 .a1-divider{ left:56%; }
+#s4 .a1-body{ column-count:2; column-gap:34px; }
+#s4 .a1-body p{ break-inside:avoid; }
 
 /* ── Slide 13 Tone + References ── */
 #s13{ background:#000; padding:0; overflow:hidden; }
@@ -868,7 +872,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 .tone-kanji{
   position:absolute; right:-20px; top:50%; transform:translateY(-55%);
   font-family:Georgia,serif; font-weight:900;
-  font-size:clamp(160px,22vw,280px); color:rgba(200,16,46,0.05);
+  font-size:280px; color:rgba(200,16,46,0.05);
   line-height:0.85; pointer-events:none; z-index:1;
 }
 .tone-divider{
@@ -882,7 +886,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .tone-lead{
   font-family:'Barlow',sans-serif; font-weight:300;
-  font-size:clamp(14px,1.1vw,17px); line-height:1.75;
+  font-size:14px; line-height:1.75;
   color:var(--wh); margin-bottom:28px;
 }
 .tone-list{
@@ -890,7 +894,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .tone-list li{
   font-family:'Barlow',sans-serif; font-weight:300;
-  font-size:clamp(12px,0.95vw,14px); line-height:1.65;
+  font-size:12px; line-height:1.65;
   color:var(--lt); padding:7px 0;
   border-bottom:1px solid rgba(255,255,255,0.05);
   display:flex; gap:12px;
@@ -903,7 +907,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 .tone-jp{
   font-family:Georgia,serif; font-weight:700;
-  font-size:clamp(36px,5vw,64px); color:var(--wh);
+  font-size:64px; color:var(--wh);
   line-height:1.1; margin-bottom:10px;
 }
 .tone-en{
@@ -932,8 +936,8 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 }
 #lightbox.open{ display:flex; }
 #lb-video{
-  max-width:85vw;
-  max-height:78vh;
+  max-width:1088px;
+  max-height:624px;
   width:auto;
   height:auto;
   outline:none;
@@ -966,18 +970,18 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s10 .wn-video{ position:absolute; inset:0; z-index:0; overflow:hidden; }
 #s10 .wn-video video{ width:100%; height:100%; object-fit:cover; filter:grayscale(40%) brightness(0.6) contrast(1.1); }
 #s10 .wn-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:linear-gradient(to right, rgba(6,4,10,0.85) 0%, rgba(6,4,10,0.55) 55%, rgba(6,4,10,0.2) 100%); }
+  background:linear-gradient(to right, rgba(6,4,10,0.9) 0%, rgba(6,4,10,0.8) 60%, rgba(6,4,10,0.72) 100%); }
 #s10 .wn-content{
-  position:absolute; left:0; top:0; bottom:0; width:55%;
+  position:absolute; inset:0;
   display:flex; flex-direction:column; justify-content:center;
-  padding:80px 48px 80px 72px; z-index:3;
+  padding:52px 90px; z-index:3;
 }
-#s10 .wn-title{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:clamp(28px,3.5vw,52px); color:var(--wh); line-height:1.05; letter-spacing:0.02em; margin-bottom:20px; }
-#s10 .wn-title span{ color:var(--r); }
-#s10 .wn-pq{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.1vw,15px); line-height:1.7; color:var(--lt); border-left:2px solid var(--r); padding-left:14px; margin-bottom:20px; }
-#s10 .wn-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,0.95vw,13.5px); line-height:1.65; color:rgba(237,233,225,0.5); }
-#s10 .wn-body p{ margin-bottom:10px; }
+#s10 .wn-title{ font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:40px; color:var(--wh); line-height:1; letter-spacing:0.02em; margin-bottom:20px; }
+#s10 .wn-title span{ color:var(--r); margin-left:12px; }
+#s10 .wn-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt); column-count:2; column-gap:48px; }
+#s10 .wn-body p{ margin-bottom:11px; break-inside:avoid; }
 #s10 .wn-body p:last-child{ margin-bottom:0; }
+#s10 .wn-accent{ color:var(--r); font-weight:500; font-size:20px; }
 /* ── Slide 06 Act III ── */
 #s6{ background:#000; padding:0; overflow:hidden; }
 #s6 .a3-content{
@@ -985,7 +989,7 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   display:flex; flex-direction:column; justify-content:center;
   padding:80px 48px 80px 72px; z-index:2;
 }
-#s6 .a3-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(13px,1.05vw,15px); line-height:1.65; color:var(--lt); }
+#s6 .a3-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt); }
 #s6 .a3-body p{ margin-bottom:14px; }
 #s6 .a3-body p:last-child{ margin-bottom:0; }
 #s6 .a3-photos{
@@ -1012,28 +1016,25 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 #s9 .s9-overlay{ position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(135deg, rgba(6,4,10,0.7) 0%, rgba(6,4,10,0.3) 100%); }
 #s9 .inner{ position:relative;z-index:2; }
-#s15{ background:#1c1208; padding:0; overflow:hidden; }
-#s15 .c-img{ position:absolute; inset:0; z-index:1; background-image:url('8b3e2ec0-ea0f-11ec-bdff-169c055f8019.webp'); background-size:cover; background-position:center 30%; filter:grayscale(40%) contrast(1.15) brightness(0.65) sepia(0.1); }
-#s15 .c-sun{ position:absolute; width:min(72vw,72vh); height:min(72vw,72vh); border-radius:50%; top:46%; left:52%; transform:translate(-50%,-50%); z-index:2; background:radial-gradient(circle at 48% 44%, #e8152e 0%, #c8102e 55%, #9a0a22 85%, rgba(100,5,15,0.4) 100%); mix-blend-mode:screen; opacity:0.7; }
-#s15 .c-paper{ position:absolute; inset:0; z-index:5; pointer-events:none; opacity:0.25; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.7 0 0 0 0 0.62 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)'/%3E%3C/svg%3E"); }
-#s15 .c-vign{ position:absolute; inset:0; z-index:4; pointer-events:none; background:linear-gradient(to top, #000 0%, #000 12%, rgba(0,0,0,0) 45%), radial-gradient(ellipse 110% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%); }
-#s15 .c-title{ position:absolute; z-index:6; top:50%; left:60px; transform:translateY(-50%); font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:clamp(48px,6.5vw,84px); line-height:0.95; letter-spacing:0.08em; color:#fff; text-transform:uppercase; }
-#s15 .c-title span{ display:block; }
+#s15{ background:#000; padding:0; overflow:hidden; }
+#s15 .cowboy-link{ display:flex; align-items:center; justify-content:center; width:100%; height:100%; pointer-events:all; }
+#s15 .cowboy-logo{ width:640px; max-width:1050px; height:auto; display:block; opacity:0.96; transition:opacity 0.3s, transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+#s15 .cowboy-link:hover .cowboy-logo{ opacity:1; transform:scale(1.03); }
 #s11{background:var(--bk);padding:60px 64px;}
 /* ── Slide 07 Character ── */
 #s7{ background:#000; padding:0; overflow:hidden; }
 #s7 .ch-content{
-  position:absolute; right:0; top:0; bottom:0; width:48%;
+  position:absolute; right:0; top:0; bottom:0; width:57%;
   display:flex; flex-direction:column; justify-content:center;
-  padding:80px 72px 80px 48px; z-index:2;
+  padding:56px 72px 56px 56px; z-index:2;
 }
-#s7 .ch-title{ font-family:Georgia,serif; font-weight:700; font-size:clamp(20px,2.6vw,34px); color:var(--wh); margin-bottom:20px; line-height:1.15; }
-#s7 .ch-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:clamp(12px,1vw,14px); line-height:1.65; color:var(--lt); }
-#s7 .ch-body p{ margin-bottom:12px; }
+#s7 .ch-title{ font-family:Georgia,serif; font-weight:700; font-size:33px; color:var(--wh); margin-bottom:16px; line-height:1.15; }
+#s7 .ch-body{ font-family:'Barlow',sans-serif; font-weight:300; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--lt); }
+#s7 .ch-body p{ margin-bottom:11px; }
 #s7 .ch-body p:last-child{ margin-bottom:0; }
 /* collage panel */
 #s7 .ch-collage{
-  position:absolute; left:0; top:0; bottom:0; width:52%;
+  position:absolute; left:0; top:0; bottom:0; width:43%;
   background:#000; overflow:hidden;
 }
 #s7 .ch-collage::after{
@@ -1041,114 +1042,21 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   background:linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
 }
 #s7 .ch-divider{
-  position:absolute; left:52%; top:10%; bottom:10%; width:1px; z-index:3;
+  position:absolute; left:43%; top:10%; bottom:10%; width:1px; z-index:3;
   background:linear-gradient(to bottom, transparent, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent);
 }
 #s5{background:#000;}
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE — phones & small tablets
-═══════════════════════════════════════════ */
-@media (max-width:768px){
-  /* Slides scroll internally, stack content */
-  .slide{ display:block; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 !important; align-items:stretch; }
-  .inner{ max-width:100%; padding:96px 24px 104px; }
 
-  /* Fixed UI */
-  #logo{ top:20px; left:20px; }
-  #snum{ top:22px; right:20px; font-size:11px; }
-  #hint{ display:none; }
-
-  /* Side text zones → full-width readable panels */
-  .ll-content,
-  #s3 .st-content,
-  #s4 .a1-content,
-  #s5 .a2-content,
-  #s6 .a3-content,
-  #s7 .ch-content,
-  #s10 .wn-content,
-  #s12 .st-content{
-    position:relative !important;
-    left:auto !important; right:auto !important; top:auto !important; bottom:auto !important;
-    width:100% !important; max-width:100% !important;
-    min-height:100vh; justify-content:center;
-    padding:96px 24px 104px !important; z-index:3;
-    background:linear-gradient(to top, rgba(6,4,10,0.95) 0%, rgba(6,4,10,0.88) 55%, rgba(6,4,10,0.62) 100%);
-  }
-
-  /* Body copy: full width, comfortable size */
-  .st-body,.a1-body,.a2-body,.a3-body,.ch-body,.wn-body,.wn-pq,.st-intro{ max-width:100% !important; font-size:15px !important; line-height:1.72 !important; }
-  .ll-quote{ font-size:clamp(20px,6vw,30px) !important; }
-  .ch-title{ font-size:28px !important; }
-  .wn-title{ font-size:32px !important; }
-
-  /* Background image/video panels → full bleed behind text */
-  #s2 .ll-imgs{ position:absolute; inset:0; width:100%; grid-template-rows:1fr; z-index:0; }
-  #s2 .ll-img-b{ display:none; }
-  #s6 .a3-photos{ position:absolute; inset:0; width:100%; grid-template-rows:1fr; z-index:0; }
-  #s6 .a3-photo-b{ display:none; }
-  #s3 .st-overlay,#s5 .a2-overlay,#s10 .wn-overlay,#s12 .st-overlay{ background:rgba(6,4,10,0.25) !important; }
-
-  /* Dividers off */
-  .ll-divider,#s4 .a1-divider,#s5 .a2-divider,#s6 .a3-divider,#s7 .ch-divider,#s12 .st-divider{ display:none !important; }
-
-  /* Slide 4 collage stacks below the text */
-  #s4 .a1-photos{ position:relative !important; width:100% !important; height:76vh; z-index:1; }
-
-  /* Slide 11 Appeal → single column, posters 2×2 */
-  #s11{ padding:0 !important; }
-  #s11 .inner{ padding:96px 24px 104px; }
-  .appeal-grid{ grid-template-columns:1fr; gap:40px; }
-  .big-stat{ font-size:52px; }
-  .comp-posters{ grid-template-columns:repeat(2,1fr); gap:14px; }
-
-  /* Slide 12 stats readable over video */
-  #s12 .stl2 li{ font-size:14px; }
-
-  /* Team → single column */
-  #s14 .inner > div[style*="grid"]{ grid-template-columns:1fr !important; gap:40px !important; max-width:100% !important; }
-
-  /* Centered content slides */
-  #s8 .inner,#s9 .inner{ padding:96px 24px 104px !important; }
-  #s9 .inner > div[style*="grid"]{ grid-template-columns:1fr !important; gap:28px !important; }
-
-  /* Closing slide title inset */
-  #s15 .c-title{ left:24px; font-size:clamp(40px,11vw,64px); }
-  #s1 .c-title{ left:24px; }
-  #s1 .c-rule{ left:24px; }
-}
 </style>
 </head>
 <body>
+<div id="stage">
 <div id="deck">
 
 <!-- ══ 01 TITLE ══ -->
 <section class="slide active" id="s1" data-i="0">
-  <div class="c-paper"></div>
-  <div class="c-sun"></div>
   <div class="c-img"></div>
-  <!-- ink splatter SVG -->
-  <svg class="c-splatter" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="112" cy="680" r="4.5" fill="rgba(10,6,4,0.55)"/>
-    <circle cx="98"  cy="710" r="2"   fill="rgba(10,6,4,0.4)"/>
-    <circle cx="130" cy="695" r="1.5" fill="rgba(10,6,4,0.35)"/>
-    <ellipse cx="88" cy="725" rx="6" ry="3" fill="rgba(10,6,4,0.45)" transform="rotate(-20 88 725)"/>
-    <circle cx="160" cy="740" r="3"   fill="rgba(10,6,4,0.3)"/>
-    <circle cx="175" cy="720" r="1.5" fill="rgba(10,6,4,0.25)"/>
-    <circle cx="210" cy="760" r="5"   fill="rgba(10,6,4,0.5)"/>
-    <circle cx="228" cy="745" r="2"   fill="rgba(10,6,4,0.35)"/>
-    <circle cx="250" cy="710" r="1"   fill="rgba(10,6,4,0.25)"/>
-    <ellipse cx="320" cy="780" rx="8" ry="4" fill="rgba(10,6,4,0.4)" transform="rotate(15 320 780)"/>
-    <circle cx="340" cy="760" r="2.5" fill="rgba(10,6,4,0.3)"/>
-    <circle cx="78"  cy="620" r="3"   fill="rgba(10,6,4,0.2)"/>
-    <circle cx="55"  cy="640" r="1.5" fill="rgba(10,6,4,0.15)"/>
-    <circle cx="1100" cy="620" r="3.5" fill="rgba(10,6,4,0.3)"/>
-    <circle cx="1120" cy="640" r="1.5" fill="rgba(10,6,4,0.2)"/>
-    <ellipse cx="1080" cy="600" rx="5" ry="2.5" fill="rgba(10,6,4,0.25)" transform="rotate(30 1080 600)"/>
-    <circle cx="950" cy="800" r="4"   fill="rgba(10,6,4,0.35)"/>
-    <circle cx="970" cy="820" r="2"   fill="rgba(10,6,4,0.25)"/>
-    <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
-  </svg>
   <div class="c-vign"></div>
   <div class="c-title">
     <span>UNT. JIRI</span>
@@ -1182,9 +1090,9 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="st-content">
     <div class="lbl" style="margin-bottom:16px;">The Story</div>
     <div class="st-body">
-      <p>We met Jiří Procházka just weeks before his fight to reclaim the UFC light heavyweight championship — just days before the birth of his first child.</p>
-      <p>One of the fastest-rising champions in UFC history, Procházka won the title in 2022 in just three fights. A national symbol in the Czech Republic, he moves between two worlds: a quiet life in a small Central European village, and the global stage of sold-out arenas.</p>
-      <p>What begins as a story about a championship comeback expands into a meditation on <em>identity, parenthood, and what remains of a man</em> when the version of himself he's built starts to fail.</p>
+      <p>We meet Jiří Procházka just weeks before his legacy-defining fight to reclaim the UFC light heavyweight championship, and days before the birth of his first child.</p>
+      <p>One of the fastest-rising champions in UFC history, Procházka won the light heavyweight championship in 2022 in just three fights, building a reputation for his unpredictable style and near-monastic commitment to a samurai code. A national symbol in the Czech Republic, he moves between the quiet simplicity of his small Central European village and the global spotlight of sold-out arenas.</p>
+      <p>What begins as a championship comeback story evolves into a deeply personal meditation on <em>resilience, discipline, and a relentless pursuit to test one's limits.</em></p>
     </div>
   </div>
 </section>
@@ -1193,11 +1101,12 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <section class="slide" id="s4" data-i="3">
   <div class="a1-content">
     <div class="lbl" style="margin-bottom:12px;white-space:nowrap;">Act I — The Origin</div>
-    <div class="a1-body" style="font-size:clamp(13px,1.1vw,15px);">
-      <p>Jiří's story begins in a small Czech village. After losing his father young, he found direction in <em>The Book of Five Rings</em> — a samurai text that became the foundation of how he lives, trains, and fights.</p>
-      <p>In 2019 he fought in Japan's Rizin league, where his philosophy took form. He turned an ancient code into something he actually lived by.</p>
-      <p>Joining UFC in 2020, his rise was immediate — three fights, one title. One of the fastest champions in the organization's history.</p>
-      <p>Then, at the height of his ascent, a serious injury forces him out for a year. His first child is on the way. Everything he's built is about to be tested.</p>
+    <div class="a1-body">
+      <p>Jiří Procházka's story begins in a small Czech village, where the loss of his father at a young age forced him into the role of head of the family. Searching for direction, he found <em>The Book of Five Rings</em>, a classic Japanese warrior text and philosophy that would become the foundation of how he lives, trains, and fights today.</p>
+      <p>With this inspiration, Jiří set out to build himself from the ground up. In 2015, he joined Japan's Rizin league, living away from home for the first time and developing a style that was unpredictable and relentless. It's also where his philosophy started to take new form, building on <em>The Book of Five Rings</em> and turning it into a code that transcended fighting.</p>
+      <p>When he joins UFC in 2020, his rise is immediate. In just three fights, he captures the light heavyweight title, becoming one of the fastest champions in the organization's history. His philosophy, unconventional training, and willingness to push himself to extremes begin to build a kind of mystique — he quickly becomes a fan favorite.</p>
+      <p>In 2022, at the height of this ascent, a serious injury forces him to vacate the belt, putting everything on hold for a year.</p>
+      <p>Now he's preparing to come back and fight for the title again, with his first child on the way. For the first time, he has to consider how this all fits into the life he's building outside of his career.</p>
     </div>
   </div>
   <div class="a1-divider"></div>
@@ -1218,9 +1127,9 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="a2-content">
     <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act II — The Loss</div>
     <div class="a2-body">
-      <p>Act II follows Jiri through the weeks leading up to his fight against Carlos Ulberg — and everything that follows the loss. In round one, Jiri nearly finishes it. Then he gets knocked out cold.</p>
-      <p>The flight home to Prague with a broken jaw. Surgery. An unexpected wave of public backlash from someone who has only ever been widely loved.</p>
-      <p>We stay with him through all of it — the disorientation, the grief, the silence.</p>
+      <p>Act II stays close to Jiří in the weeks leading up to the fight and everything that follows. He and his team are confident heading in. In Round 1, Jiří severely injures his opponent and has all but won the fight. Then something in his demeanor changes — in a moment, Jiří is on the ground, knocked out cold.</p>
+      <p>The global crowd goes silent in what will go down as one of the most shocking title fight losses in history. We stay with Jiří through the aftermath with his team: the flight home to Prague with a broken jaw, his post-fight surgery, and the birth of his daughter, all within a matter of days.</p>
+      <p>After the loss, the shift in his fandom is immediate. Someone who has been beloved for years for his unpredictability is suddenly paying the price for it with an unexpected wave of backlash.</p>
       <p class="a2-climax">At his lowest point mentally and emotionally — <em>his first child is born.</em></p>
     </div>
   </div>
@@ -1232,9 +1141,10 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="a3-content">
     <div class="lbl" style="margin-bottom:16px;white-space:nowrap;">Act III — The Rebuild</div>
     <div class="a3-body">
-      <p>The birth of Jiri's daughter Elenka reframes everything. There's something immediate and external that now carries weight — and with it, a version of freedom is lost.</p>
-      <p>He restructures his team, lets go of what isn't working, and faces the backlash from his loss. Finding strength not in winning, but in changing course.</p>
-      <p>Climb Mount Fuji. Training camp in Thailand. The road back to MSG — and the light heavyweight championship.</p>
+      <p>The birth of Jiří's daughter, Elenka, changes the meaning of the comeback. After a career built on discipline and self-actualization, we see Jiří step into fatherhood and relinquish his freedom.</p>
+      <p>Coming off a devastating loss and public backlash, he begins to rebuild — restructuring his team, questioning old methods, and letting go of what no longer serves him.</p>
+      <p>We follow him through the next stage of his transformation: a climb up Mount Fuji, a new training camp in Thailand, and the road toward his next fight at Madison Square Garden.</p>
+      <p>The question we explore with Jiří is no longer just whether he can win again. It is whether he can change — as a fighter, as a father, and as a man — <em>without losing the code that made him who he is.</em></p>
     </div>
   </div>
   <div class="a3-photos">
@@ -1253,33 +1163,33 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
     <div class="lbl" style="margin-bottom:16px;">Character Overview</div>
     <div class="ch-title">Jiří Procházka<span class="red">.</span></div>
     <div class="ch-body">
-      <p>Jiří fights to test himself. Where most elite athletes are driven by control, strategy, and legacy, Jiří openly invites chaos. He allows himself to be hit, to be pushed to the edge, because for him the fight is as internal as it is physical.</p>
+      <p>Jiří's story reflects a shifting idea of what strength and identity can look like. He fights to test himself. Where most elite athletes are driven by control, strategy, and legacy, Jiří openly invites chaos. He allows himself to be hit, to be pushed to the edge, because for him the fight is as internal as it is physical.</p>
       <p>This comes from a longer search for something more personal — whether that's structure, meaning, or a code to live by. This makes him both unpredictable and palpably present.</p>
-      <p>He doesn't lean into trash talk or performance. He brings a straightforwardness and sincerity to this violent, unforgiving environment — his actions feel instinctive and from the heart.</p>
-      <p>For many in the Czech Republic, he represents something closer to an Olympian figure — a symbol of discipline, resilience, and pride.</p>
+      <p>He brings a straightforwardness and sincerity to this violent and unforgiving environment that feels refreshing and genuine. Whether it's shaving his head in solidarity with a fan battling cancer or speaking openly about his personal philosophy, his actions feel instinctive and from the heart.</p>
+      <p>For many in the Czech Republic, he represents something closer to an Olympian figure — a symbol of discipline, resilience, and pride. He has embraced that responsibility without turning it into spectacle.</p>
     </div>
   </div>
 </section>
 
 <!-- ══ 08 WHAT MAKES THIS SPECIAL ══ -->
 <section class="slide" id="s9" data-i="7">
-  <div class="s9-video"><video autoplay muted playsinline loop><source src="before_fight_web.mp4" type="video/mp4"></video></div>
+  <div class="s9-video"><video id="s9-video" autoplay muted playsinline loop><source src="before_fight_web.mp4" type="video/mp4"></video></div>
   <div class="s9-overlay"></div>
-  <div class="inner" style="max-width:min(860px,80vw);">
+  <div class="inner" style="max-width:860px;">
     <div class="lbl">What Makes This Special</div>
-    <p style="font-family:'Barlow Condensed',sans-serif;font-weight:300;font-size:clamp(22px,2.8vw,38px);line-height:1.25;color:var(--wh);letter-spacing:0.02em;margin-bottom:32px;">We've captured Jiří Procházka at a moment that <em style="color:var(--r);font-style:normal;">can never be repeated.</em></p>
+    <p style="font-family:'Barlow Condensed',sans-serif;font-weight:300;font-size:var(--fs-lead);line-height:1.25;color:var(--wh);letter-spacing:0.02em;margin-bottom:32px;">We've captured Jiří Procházka at a moment that <em style="color:var(--r);font-style:normal;">can never be repeated.</em></p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;">
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Rare Access</div>
-        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">Embedded within his inner circle during the most pivotal chapter of his life and career — a level of honesty and proximity rarely available to documentary filmmaking.</p>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Rare Access</div>
+        <p style="font-size:var(--fs-body);line-height:var(--lh-body);color:var(--lt);font-weight:300;">With unlimited access to his inner circle during the most pivotal chapter of his life and career, we've documented his journey intimately — including the unexpected public fall of a star no one saw coming.</p>
       </div>
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">A Decade of Archive</div>
-        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">Over a decade of never-seen archival materials secured — including footage from before his rise, pre-Rizin, and through his ascent to champion.</p>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">A Decade of Archive</div>
+        <p style="font-size:var(--fs-body);line-height:var(--lh-body);color:var(--lt);font-weight:300;">We've secured extensive, never-seen archival material spanning over a decade. We are well into production, and a large portion of the film has already been captured.</p>
       </div>
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Already in Production</div>
-        <p style="font-size:14px;line-height:1.75;color:var(--lt);font-weight:300;">A large portion of the film has already been shot. Jiří has granted full creative control — with a shared interest in telling a story that feels honest and raw.</p>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:10px;">Full Creative Control</div>
+        <p style="font-size:var(--fs-body);line-height:var(--lh-body);color:var(--lt);font-weight:300;">Jiří has granted production full creative control, with a shared interest in telling a version of his story that feels honest and raw.</p>
       </div>
     </div>
   </div>
@@ -1290,50 +1200,47 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div class="wn-video"><video autoplay muted playsinline loop><source src="s10_teixeira_web.mp4" type="video/mp4"></video></div>
   <div class="wn-overlay"></div>
   <div class="wn-content">
-    <div class="lbl" style="margin-bottom:16px;">Why This Film — Why Now</div>
-    <div class="wn-title">Behind the myth,<br><span>a man.</span></div>
-    <div class="wn-pq">This is not just a comeback story. It's an intimate portrait of a man navigating identity, purpose, and legacy at the highest level of combat sports — just as the foundation of his life abruptly changes course.</div>
+    <div class="lbl" style="margin-bottom:12px;">Why This Film — Why Now</div>
+    <div class="wn-title">Behind the myth,<span>a man.</span></div>
     <div class="wn-body">
-      <p>Masculinity has been at the forefront of conversation for more than a decade. In an era of shifting identity, young men are looking not to those who foster a good life, but those who garner the most attention.</p>
-      <p>UFC has one of the youngest and most male-skewing audiences in major sports — more than 70% of its fanbase are males 18–49. Combat sports stars of the modern era tend to be bombastic and arrogant. Jiri is the counterpoint to all of this.</p>
-      <p>He does not view winning as fuel for his ego, but a reflection of his honor and discipline. He lives by a code that seems to have disappeared from modern western society — and yet is still a champion, still a star, and still a fan favorite.</p>
+      <p>Masculinity, and most recently the "manosphere," have been at the forefront of conversation for more than a decade. In an era of shifting identity, young men are looking not to those who foster a good life, but to those who garner the most attention — Andrew Tate, Clavicular, Sneako.</p>
+      <p>UFC has one of the youngest and most male-skewing audiences in major sports, with more than 70% of its fanbase males 18–49, and 40% of them in the 18–34 group. UFC is viewed by many as a brutal expression of masculinity — violent, aggressive, primal. Combat sports stars in the modern era tend to be bombastic and arrogant, with their antics outside the ring often overshadowing their accomplishments (Conor McGregor, anyone?).</p>
+      <p class="wn-accent">Jiří is the counterpoint to all of this.</p>
+      <p>He does not view winning as fuel for his ego, but as a reflection of his honor and discipline. He treats those around him with kindness, mercy, and respect — even to the point of losing. He lives by a code of honor that seems to have disappeared from modern Western society, and yet he is still a champion, still a star, and still a fan favorite.</p>
+      <p>This is not just a comeback story. It's an intimate portrait of a man navigating identity, purpose, and legacy at the highest level of combat sports, just as the foundation of his life abruptly changes course. Behind the myth is a man being forced to question what strength means when winning is no longer enough. In this moment of reckoning, a side of Jiří emerges that few have ever seen — not even those closest to him.</p>
     </div>
   </div>
 </section>
 
 <!-- ══ 10 APPEAL + COMPS ══ -->
 <section class="slide" id="s11" data-i="9">
-  <div class="inner">
+  <div class="inner" style="max-width:1140px;">
     <div class="lbl">Appeal</div>
-    <div class="appeal-grid">
-      <div>
-        <div class="big-stat" data-count="700" data-suffix="M">700M</div><div class="big-lbl">UFC Fans Globally · 175+ Countries</div>
-        <div class="big-stat" data-count="4.96" data-suffix="M" data-decimals="2">4.96M</div><div class="big-lbl">Views / Min · Jiri's Championship Fight</div>
-        <div class="big-stat" data-count="200" data-suffix="M+">200M+</div><div class="big-lbl">UFC Social Media Followers</div>
-        <div style="height:1px;margin:20px 0;background:linear-gradient(90deg,rgba(200,16,46,0.4),transparent);"></div>
-        <p class="body" style="font-size:12px;">At a time when a lot of young men feel lost or isolated, Jiri's path — channeling disadvantage into discipline, ambition, and belief — can serve as an example.</p>
-      </div>
-      <div>
-        <div class="comps-hd">Comparable Films</div>
-        <div class="comp-posters">
-          <div class="cp-item">
-            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMjA2YTAxMzMtNzA2Mi00NTcyLTg4NzUtODIxYzFiYzdiNWNlXkEyXkFqcGc@._V1_SX300.jpg" alt="Free Solo">
-            <div class="cp-cap"><div class="cp-title">Free Solo</div><div class="cp-dir">Elizabeth Chai Vasarhelyi & Jimmy Chin</div></div>
-          </div>
-          <div class="cp-item">
-            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BYmU4OGMwODQtYjJkMC00NDIwLWFkMmQtMmYxM2RhN2U5MWIxXkEyXkFqcGc@._V1_SX300.jpg" alt="The Alpinist">
-            <div class="cp-cap"><div class="cp-title">The Alpinist</div><div class="cp-dir">Peter Mortimer & Nick Rosen</div></div>
-          </div>
-          <div class="cp-item">
-            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BODc3NTAxMTY1MV5BMl5BanBnXkFtZTcwOTE4NjUzMw@@._V1_SX300.jpg" alt="Grizzly Man">
-            <div class="cp-cap"><div class="cp-title">Grizzly Man</div><div class="cp-dir">Werner Herzog</div></div>
-          </div>
-          <div class="cp-item">
-            <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMTMxNTk3NDY1NV5BMl5BanBnXkFtZTcwNDk0ODg3MQ@@._V1_SX300.jpg" alt="Man on Wire">
-            <div class="cp-cap"><div class="cp-title">Man on Wire</div><div class="cp-dir">James Marsh</div></div>
-          </div>
+    <div class="appeal-prose">
+      <p>UFC draws an estimated <span class="appeal-stat">700 million</span> fans globally and reaches over <span class="appeal-stat">1 billion</span> households worldwide across more than 175 countries and territories. Roughly 43% of its audience falls between the ages of 18 and 34.</p>
+      <p>It is one of the most followed sports leagues globally, with well over <span class="appeal-stat">200 million</span> followers across its social media platforms and billions of organic video views on platforms like YouTube.</p>
+      <p>Jiří Procházka has been voted the most popular fighter in the UFC. He most recently fought for the light heavyweight championship — an event that drew roughly 2.65M on CBS, with global streams via Paramount+ averaging a record-breaking <span class="appeal-stat">4.96M views per minute</span>.</p>
+      <p>On a narrative level, we're following an individual who channeled his own disadvantage into something productive, building himself through discipline, ambition, and belief. At a time when a lot of young men feel lost or isolated, Jiří's path can serve as an example.</p>
+    </div>
+    <div class="appeal-comps">
+      <div class="comps-hd">Comparable Films</div>
+      <div class="comp-posters">
+        <div class="cp-item">
+          <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMjA2YTAxMzMtNzA2Mi00NTcyLTg4NzUtODIxYzFiYzdiNWNlXkEyXkFqcGc@._V1_SX300.jpg" alt="Free Solo">
+          <div class="cp-cap"><div class="cp-title">Free Solo</div><div class="cp-dir">Elizabeth Chai Vasarhelyi & Jimmy Chin</div></div>
         </div>
-
+        <div class="cp-item">
+          <img class="cp-poster-img" src="ghost_dog_poster.jpg" alt="Ghost Dog: The Way of the Samurai">
+          <div class="cp-cap"><div class="cp-title">Ghost Dog</div><div class="cp-dir">Jim Jarmusch</div></div>
+        </div>
+        <div class="cp-item">
+          <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BODc3NTAxMTY1MV5BMl5BanBnXkFtZTcwOTE4NjUzMw@@._V1_SX300.jpg" alt="Grizzly Man">
+          <div class="cp-cap"><div class="cp-title">Grizzly Man</div><div class="cp-dir">Werner Herzog</div></div>
+        </div>
+        <div class="cp-item">
+          <img class="cp-poster-img" src="https://m.media-amazon.com/images/M/MV5BMTMxNTk3NDY1NV5BMl5BanBnXkFtZTcwNDk0ODg3MQ@@._V1_SX300.jpg" alt="Man on Wire">
+          <div class="cp-cap"><div class="cp-title">Man on Wire</div><div class="cp-dir">James Marsh</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1371,18 +1278,20 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 <section class="slide" id="s14" data-i="11">
   <div class="inner">
     <div class="lbl">The Team</div>
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:36px;max-width:860px;">
+    <div class="team-grid" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:36px;max-width:900px;">
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,30px);color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Dylan Harris</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer</div>
-        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;">International producer whose projects have premiered at Sundance, Tribeca, and Netflix, with credits spanning independent feature documentaries, unscripted pilots, and premium series.</p>
-        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;margin-top:14px;">Most recently produced <em style="color:var(--wh);">John Carpenter's Suburban Screams</em> documentary series for Peacock.</p>
+        <img class="team-portrait" src="team_jan.jpg" alt="Jan Bezouška">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Jan Bezouška</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer — Cowboy Studio</div>
+        <p style="font-size:14px;line-height:1.55;color:var(--lt);font-weight:300;">Los Angeles-based producer from the Czech Republic. Spent the past decade working inside the film world, collaborating with major studios, filmmakers, and cultural brands including Sony Pictures, Universal, Netflix, Kanye West, and Beyoncé's Ivy Park.</p>
+        <p style="font-size:14px;line-height:1.55;color:var(--lt);font-weight:300;margin-top:14px;">Now leads <em style="color:var(--wh);">Cowboy Studio</em> — <span style="color:rgba(255,255,255,0.35);font-size:12px;">cowboy-studio.com</span></p>
       </div>
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(22px,2.2vw,30px);color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Jan Bezouška</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer — Cowboy Studio</div>
-        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;">Los Angeles-based producer from the Czech Republic. Spent the past decade working inside the film world, collaborating with major studios, filmmakers, and cultural brands including Sony Pictures, Universal, Netflix, Kanye West, and Beyoncé's Ivy Park.</p>
-        <p style="font-size:14px;line-height:1.8;color:var(--lt);font-weight:300;margin-top:14px;">Now leads <em style="color:var(--wh);">Cowboy Studio</em> — <span style="color:rgba(255,255,255,0.35);font-size:12px;">cowboy-studio.com</span></p>
+        <img class="team-portrait" src="team_dylan.jpg" alt="Dylan Harris">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:28px;color:var(--wh);letter-spacing:0.04em;margin-bottom:6px;">Dylan Harris</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--r);margin-bottom:20px;">Producer</div>
+        <p style="font-size:14px;line-height:1.55;color:var(--lt);font-weight:300;">International producer whose projects have premiered at Sundance, Tribeca, and Netflix, with credits spanning independent feature documentaries, unscripted pilots, and premium series.</p>
+        <p style="font-size:14px;line-height:1.55;color:var(--lt);font-weight:300;margin-top:14px;">Most recently produced <em style="color:var(--wh);">John Carpenter's Suburban Screams</em> documentary series for Peacock.</p>
       </div>
     </div>
   </div>
@@ -1390,35 +1299,9 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
 
 <!-- ══ 13 CLOSING ══ -->
 <section class="slide" id="s15" data-i="12">
-  <div class="c-paper"></div>
-  <div class="c-sun"></div>
-  <div class="c-img"></div>
-  <svg class="c-splatter" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="112" cy="680" r="4.5" fill="rgba(10,6,4,0.55)"/>
-    <circle cx="98"  cy="710" r="2"   fill="rgba(10,6,4,0.4)"/>
-    <circle cx="130" cy="695" r="1.5" fill="rgba(10,6,4,0.35)"/>
-    <ellipse cx="88" cy="725" rx="6" ry="3" fill="rgba(10,6,4,0.45)" transform="rotate(-20 88 725)"/>
-    <circle cx="160" cy="740" r="3"   fill="rgba(10,6,4,0.3)"/>
-    <circle cx="175" cy="720" r="1.5" fill="rgba(10,6,4,0.25)"/>
-    <circle cx="210" cy="760" r="5"   fill="rgba(10,6,4,0.5)"/>
-    <circle cx="228" cy="745" r="2"   fill="rgba(10,6,4,0.35)"/>
-    <circle cx="250" cy="710" r="1"   fill="rgba(10,6,4,0.25)"/>
-    <ellipse cx="320" cy="780" rx="8" ry="4" fill="rgba(10,6,4,0.4)" transform="rotate(15 320 780)"/>
-    <circle cx="340" cy="760" r="2.5" fill="rgba(10,6,4,0.3)"/>
-    <circle cx="78"  cy="620" r="3"   fill="rgba(10,6,4,0.2)"/>
-    <circle cx="55"  cy="640" r="1.5" fill="rgba(10,6,4,0.15)"/>
-    <circle cx="1100" cy="620" r="3.5" fill="rgba(10,6,4,0.3)"/>
-    <circle cx="1120" cy="640" r="1.5" fill="rgba(10,6,4,0.2)"/>
-    <ellipse cx="1080" cy="600" rx="5" ry="2.5" fill="rgba(10,6,4,0.25)" transform="rotate(30 1080 600)"/>
-    <circle cx="950" cy="800" r="4"   fill="rgba(10,6,4,0.35)"/>
-    <circle cx="970" cy="820" r="2"   fill="rgba(10,6,4,0.25)"/>
-    <circle cx="990" cy="790" r="1.5" fill="rgba(10,6,4,0.2)"/>
-  </svg>
-  <div class="c-vign"></div>
-  <div class="c-title">
-    <span>UNT. JIRI</span>
-    <span>PROCHAZKA</span>
-  </div>
+  <a class="cowboy-link" href="https://www.cowboy-studio.com/" target="_blank" rel="noopener noreferrer">
+    <img class="cowboy-logo" src="cowboy_logo.png" alt="Cowboy Studio">
+  </a>
 </section>
 
 </div>
@@ -1429,30 +1312,19 @@ kbd{border:1px solid rgba(255,255,255,0.3);padding:2px 5px;font-family:inherit;f
   <div id="logo">
     <span class="logo-unt">UNT. JIRI PROCHAZKA</span>
   </div>
-  <div id="player">
-    <button onclick="go(-1)" title="Previous">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <button id="play-btn" onclick="togglePlay()" title="Play / Pause">
-      <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-    </button>
-    <button onclick="go(1)" title="Next">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg>
-    </button>
-  </div>
   <div id="snum">01 / 13</div>
   <button id="prev" onclick="go(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg></button>
   <button id="next" onclick="go(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 6 15 12 9 18"/></svg></button>
   <div id="bottom-bar">
     <div id="hint"><kbd>←</kbd><kbd>→</kbd>&nbsp;navigate · <kbd>Space</kbd>&nbsp;advance</div>
     <div id="dots"></div>
-    <div style="width:120px"></div>
+    <button id="fs-btn" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle fullscreen">
+      <svg id="fs-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg id="fs-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </button>
   </div>
 </div>
-<audio id="bg-audio" loop preload="none">
-  <source src="" type="audio/mpeg">
-</audio>
+</div><!-- /stage -->
 
 <script>
 const slides=document.querySelectorAll('.slide');
@@ -1482,6 +1354,13 @@ if(s3vid){
   s3vid.addEventListener('timeupdate',()=>{
     if(s3vid.currentTime>=17){s3vid.currentTime=0;}
   });
+}
+/* Slide 08 (before-fight) — start 2s in, and loop back to the 2s mark */
+const s9vid = document.getElementById('s9-video');
+if(s9vid){
+  const S9_START = 2;
+  s9vid.addEventListener('loadedmetadata',()=>{ s9vid.currentTime=S9_START; });
+  s9vid.addEventListener('timeupdate',()=>{ if(s9vid.currentTime < S9_START-0.05) s9vid.currentTime=S9_START; });
 }
 function startS3Video(){
   if(!s3vid)return;
@@ -1523,45 +1402,27 @@ document.addEventListener('wheel',e=>{
 function tc(i){const el=document.getElementById('c'+i);const was=el.classList.contains('open');document.querySelectorAll('.comp').forEach(x=>x.classList.remove('open'));if(!was)el.classList.add('open');}
 document.querySelectorAll('.chip').forEach(el=>el.addEventListener('click',()=>el.classList.toggle('on')));
 goTo(0);
-// Music player
-const audio = document.getElementById('bg-audio');
-audio.volume = 0.6;
-let playing = false;
-function togglePlay(){
-  if(!audio.src || audio.src===window.location.href){
-    const name = prompt('Paste a path or filename for your music track (e.g. music.mp3):');
-    if(!name) return;
-    audio.src = name;
-  }
-  if(playing){ audio.pause(); playing=false; }
-  else { audio.play().catch(()=>{}); playing=true; }
-  document.getElementById('icon-play').style.display = playing?'none':'block';
-  document.getElementById('icon-pause').style.display = playing?'block':'none';
-}
-
-/* ── Parallax slide 01 ── */
+// Fixed-canvas PDF scaling — fit the 1280×800 stage to any screen
 (function(){
-  const deck = document.getElementById('deck');
-  let rx=0,ry=0,tx=0,ty=0,raf=null;
-  deck.addEventListener('mousemove',e=>{
-    const s1 = document.getElementById('s1');
-    if(!s1.classList.contains('active')) return;
-    const cx=window.innerWidth/2, cy=window.innerHeight/2;
-    tx=(e.clientX-cx)/cx; ty=(e.clientY-cy)/cy;
-    if(!raf) raf=requestAnimationFrame(tick);
-  });
-  function tick(){
-    rx+=(tx-rx)*0.08; ry+=(ty-ry)*0.08;
-    const kanji=document.querySelector('#s1 .c-kanji');
-    const title=document.querySelector('#s1 .c-title');
-    const sun=document.querySelector('#s1 .c-sun');
-    if(kanji) kanji.style.transform=`translateY(-50%) translate(${rx*-18}px,${ry*-12}px)`;
-    if(title) title.style.transform=`translateY(-50%) translate(${rx*10}px,${ry*7}px)`;
-    if(sun)   sun.style.transform=`translate(-50%,-50%) translate(${rx*6}px,${ry*5}px)`;
-    if(Math.abs(tx-rx)>0.001||Math.abs(ty-ry)>0.001) raf=requestAnimationFrame(tick);
-    else raf=null;
+  function fit(){
+    const s = Math.min(window.innerWidth/1280, window.innerHeight/800);
+    document.documentElement.style.setProperty('--pdf-scale', s);
   }
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+  fit();
 })();
+// Fullscreen toggle
+function toggleFullscreen(){
+  if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen||(()=>{})).call(document.documentElement); }
+  else { (document.exitFullscreen||document.webkitExitFullscreen||(()=>{})).call(document); }
+}
+document.addEventListener('fullscreenchange',()=>{
+  const fs=!!document.fullscreenElement;
+  document.getElementById('fs-open').style.display=fs?'none':'block';
+  document.getElementById('fs-close').style.display=fs?'block':'none';
+});
+
 
 /* ── Counter animation slide 11 ── */
 function animateCounters(){
